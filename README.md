@@ -9,8 +9,7 @@ Version 0.8
 
 ### Preparing and compiling ###
 
-* Use premake4 tool to generate project files for preffered IDE
-* Tests depend on OpenGL 3.3 and freeglut library (http://freeglut.sourceforge.net/)
+* Use CMake tool to generate project files for preffered IDE
 
 ### Contact ###
 
