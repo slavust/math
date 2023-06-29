@@ -13,4 +13,4 @@ Version 0.8
 
 ### Contact ###
 
-e-mail: homer@slavust.name
+e-mail: homer at slavust.name
