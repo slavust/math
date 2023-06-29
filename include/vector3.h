@@ -175,17 +175,11 @@ namespace math
 
         real& operator [] (size_t indx)
         {
-#ifdef MATH_CHECK_INDEX_BOUNDS
-            if(indx >= 3) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-#endif // MATH_CHECK_INDEX_BOUNDS
             return ptr()[indx];
         }
 
         real operator [] (size_t indx) const
         {
-#ifdef MATH_CHECK_INDEX_BOUNDS
-            if(indx >= 3) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-#endif // MATH_CHECK_INDEX_BOUNDS
             return ptr()[indx];
         }
 
@@ -215,9 +209,6 @@ namespace math
 
         vector3 operator / (real scalar) const
         {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             return vector3(x / scalar, y / scalar, z / scalar);
         }
 
@@ -231,9 +222,6 @@ namespace math
 
         vector3& operator /= (real scalar)
         {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             x /= scalar;
             y /= scalar;
             z /= scalar;
@@ -271,9 +259,6 @@ namespace math
         ///
         vector3 operator / (const vector3& v) const
         {
-#ifdef MATH_CHECK_DIVISION
-            if(v.x == 0.0f || v.y == 0.0f || v.z == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             return vector3(x/v.x, y/v.y, z/v.z);
         }
 
@@ -284,9 +269,6 @@ namespace math
         ///
         vector3& operator /= (const vector3& v)
         {
-#ifdef MATH_CHECK_DIVISION
-            if(v.x == 0.0f || v.y == 0.0f || v.z == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             x /= v.x;
             y /= v.y;
             z /= v.z;

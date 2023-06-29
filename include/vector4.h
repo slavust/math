@@ -103,17 +103,11 @@ namespace math
 
         real& operator [] (size_t indx)
         {
-#ifdef MATH_CHECK_INDEX_BOUNDS
-            if(indx >= 4) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-#endif // MATH_CHECK_INDEX_BOUNDS
             return ptr()[indx];
         }
 
         real operator [] (size_t indx) const
         {
-#ifdef MATH_CHECK_INDEX_BOUNDS
-            if(indx >= 4) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-#endif // MATH_CHECK_INDEX_BOUNDS
             return ptr()[indx];
         }
 
@@ -143,9 +137,6 @@ namespace math
 
         vector4 operator / (real scalar) const
         {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             return vector4(x / scalar, y / scalar, z / scalar, w / scalar);
         }
 
@@ -160,10 +151,6 @@ namespace math
 
         vector4& operator /= (real scalar)
         {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
-
             x /= scalar;
             y /= scalar;
             z /= scalar;
@@ -205,9 +192,6 @@ namespace math
         ///
         vector4 operator / (const vector4& v) const
         {
-#ifdef MATH_CHECK_DIVISION
-            if(v.x == 0.0f || v.y == 0.0f || v.z == 0.0f || v.w == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             return vector4(x/v.x, y/v.y, z/v.z, w/v.w);
         }
 
@@ -218,9 +202,6 @@ namespace math
         ///
         vector4& operator /= (const vector4& v)
         {
-#ifdef MATH_CHECK_DIVISION
-            if(v.x == 0.0f || v.y == 0.0f || v.z == 0.0f || v.w == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
             x /= v.x;
             y /= v.y;
             z /= v.z;

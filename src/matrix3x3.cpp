@@ -44,9 +44,6 @@ namespace math
 
     matrix3x3 matrix3x3::operator / (real scalar) const
     {
-#ifdef MATH_CHECK_DIVISION
-        if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         return matrix3x3(val[0][0] / scalar,
                          val[1][0] / scalar,
                          val[2][0] / scalar,
@@ -62,9 +59,6 @@ namespace math
 
     matrix3x3& matrix3x3::operator /= (real scalar)
     {
-#ifdef MATH_CHECK_DIVISION
-        if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         val[0][0] /= scalar;
         val[1][0] /= scalar;
         val[2][0] /= scalar;
@@ -165,7 +159,6 @@ namespace math
 
             //assert(cos_y != 0.0f || sin_y != 0.0f);
             //ret.yaw = atan2(sin_y, cos_y);
-            assert(val[2][2] != 0.0f || val[2][0] != 0.0f); // todo: add exception?
             ret.yaw = atan2(val[2][0], val[2][2]);
 
             // cos(ret.pitch) != 0
@@ -174,7 +167,6 @@ namespace math
 
             //assert(cos_r != 0.0f || sin_r != 0.0f);
             //ret.roll = atan2(sin_r, cos_r);
-            assert(val[1][1] != 0.0f || val[0][1] != 0.0f); // todo: add exception?
             ret.roll = atan2(val[0][1], val[1][1]);
         }
 

@@ -60,9 +60,6 @@ namespace math
 
     matrix4x4 matrix4x4::operator / (real scalar) const
     {
-#ifdef MATH_CHECK_DIVISION
-        if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         return matrix4x4(val[0][0] / scalar,
                          val[0][1] / scalar,
                          val[0][2] / scalar,
@@ -86,9 +83,6 @@ namespace math
 
     matrix4x4& matrix4x4::operator /= (real scalar)
     {
-#ifdef MATH_CHECK_DIVISION
-        if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         val[0][0] /= scalar;
         val[0][1] /= scalar;
         val[0][2] /= scalar;
@@ -208,9 +202,7 @@ namespace math
         }
         else// cos(ret.pitch) != 0
         {
-            assert(val[2][2] != 0.0f || val[2][0] != 0.0f); // todo: add exception?
             ret.yaw = atan2(val[2][0], val[2][2]);
-            assert(val[1][1] != 0.0f || val[0][1] != 0.0f); // todo: add exception?
             ret.roll = atan2(val[0][1], val[1][1]);
         }
 

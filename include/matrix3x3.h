@@ -4,6 +4,8 @@
 #include "math_predefs.h"
 #include "vector3.h"
 
+#include <array>
+
 namespace math
 {
     class euler;
@@ -108,9 +110,6 @@ namespace math
         matrix3x3 inverse() const
         {
             real d = determinant();
-
-            if(d == 0.0f) MATH_EXCEPTION(ET_NON_INVERTIBLE_MATRIX);
-
             return adjoint() / d;
         }
 
@@ -168,19 +167,6 @@ namespace math
             return *this;
         }
 
-#ifdef MATH_CHECK_INDEX_BOUNDS
-        ArrayHolder<real, 3> operator [] (size_t indx)
-        {
-            if(indx >= 3) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<real, 3>(val[indx]);
-        }
-
-        ArrayHolder<const real, 3> operator [] (size_t indx) const
-        {
-            if(indx >= 3) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<const real, 3>(val[indx]);
-        }
-#else
         real* operator [] (size_t indx)
         {
             return val[indx];
@@ -190,8 +176,6 @@ namespace math
         {
             return val[indx];
         }
-#endif
-
 
         /// \brief Pointer to array of elements
         ///

@@ -4,6 +4,7 @@
 #include "math_predefs.h"
 #include "vector2.h"
 
+
 namespace math
 {
     /// \brief 2x2 matrix
@@ -98,9 +99,6 @@ namespace math
         matrix2x2 inverse() const
         {
             real d = determinant();
-
-            if(d == 0.0f) MATH_EXCEPTION(ET_NON_INVERTIBLE_MATRIX);
-
             return adjoint() / d;
         }
 
@@ -161,21 +159,6 @@ namespace math
         {
             return !memcmp(val, op2.val, sizeof(real)*4);
         }
-
-#ifdef MATH_CHECK_INDEX_BOUNDS
-        ArrayHolder<real, 2> operator [] (size_t indx)
-        {
-
-            if(indx >= 2) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<real, 2>(val[indx]);
-        }
-
-        ArrayHolder<const real, 2> operator [] (size_t indx) const
-        {
-            if(indx >= 2) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<const real, 2>(val[indx]);
-        }
-#else
         real* operator [] (size_t indx)
         {
             return val[indx];
@@ -185,7 +168,6 @@ namespace math
         {
             return val[indx];
         }
-#endif
 
         /// \brief Pointer to array of elements
         ///

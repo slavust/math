@@ -53,13 +53,6 @@ namespace math
         rot[0][2] = c1*s2*s3 - c3*s1;
         rot[1][2] = s1*s3 + c1*c3*s2;
         rot[2][2] = c1*c2;
-
-        //rot = matrix3x3(c1*c3 + s1*s2*s3, c3*s1*s2 - c1*s1, c2*s1,
-        //                            c2*s3,            c2*c3,   -s2,
-        //                 c1*s2*s3 - c3*s1, s1*s3 + c1*c3*s2, c1*c2);
-
-        //todo: compare with:
-        //rot = rotate3dy(yaw) * rotate3dx(pitch) * rotate3Dz(roll);
     }
 
     void euler::toRotationMatrix(matrix4x4& rot) const

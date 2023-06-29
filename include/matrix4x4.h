@@ -97,9 +97,6 @@ namespace math
         matrix4x4 inverse() const
         {
             real d = determinant();
-
-            if(d == 0.0f) MATH_EXCEPTION(ET_NON_INVERTIBLE_MATRIX);
-
             return adjoint() / d;
         }
 
@@ -151,20 +148,6 @@ namespace math
             return *this;
         }
 
-#ifdef MATH_CHECK_INDEX_BOUNDS
-        ArrayHolder<real, 4> operator [] (size_t indx)
-        {
-
-            if(indx >= 4) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<real, 4>(val[indx]);
-        }
-
-        ArrayHolder<const real, 4> operator [] (size_t indx) const
-        {
-            if(indx >= 4) MATH_EXCEPTION(ET_INDEX_OUT_OF_BOUNDS);
-            return ArrayHolder<const real, 4>(val[indx]);
-        }
-#else
         real* operator [] (size_t indx)
         {
             return val[indx];
@@ -174,7 +157,6 @@ namespace math
         {
             return val[indx];
         }
-#endif
 
 
         /// \brief Pointer to array of elements
