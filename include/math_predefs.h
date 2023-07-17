@@ -18,7 +18,7 @@ namespace math
 
     constexpr real sign(real s)
     {
-        return s < 0 ? -1.0f : 1.0f;
+        return s < 0 ? -1 : 1;
     }
 } // namespace math
 

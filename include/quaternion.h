@@ -24,7 +24,7 @@ namespace math
         /// \brief Default constructor.
         /// Initializes w, x, y, z with zero
         ///
-        quaternion() : w(1.0f), x(0.0f), y(0.0f), z(0.0f)
+        quaternion() : w(1), x(0), y(0), z(0)
         {
         }
 

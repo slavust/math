@@ -24,7 +24,7 @@ namespace math
         /// \brief Default constructor.
         /// initializes yaw, pitch, roll with zero.
         ///
-        euler() : yaw(0.0f), pitch(0.0f), roll(0.0f)
+        euler() : yaw(0), pitch(0), roll(0)
         {
         }
 

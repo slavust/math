@@ -20,7 +20,7 @@ namespace math
         ///
         /// Initializes rho and phi with zero (origin)
         ///
-        polar() : rho(0.0f), phi(0.0f)
+        polar() : rho(0), phi(0)
         {
         }
 

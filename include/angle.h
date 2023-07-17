@@ -7,8 +7,8 @@
 namespace math
 {
     constexpr real PI = static_cast<real>(3.14159265358979323846);
-    constexpr real TWO_PI = PI*2.0f;
-    constexpr real PI_TWO = PI/2.0f;
+    constexpr real TWO_PI = PI * 2;
+    constexpr real PI_TWO = PI / 2;
 
     /// \brief Convert degrees to radians
     ///
@@ -17,7 +17,7 @@ namespace math
     ///
     constexpr real toRadians(real degrees)
     {
-        constexpr real _PI_180 = PI / 180.0f;
+        constexpr real _PI_180 = PI / 180;
         return degrees * _PI_180;
     }
 
@@ -28,7 +28,7 @@ namespace math
     ///
     constexpr real toDegrees(real radians)
     {
-        constexpr real _180_PI = 180.0f / PI;
+        constexpr real _180_PI = 180 / PI;
         return radians * _180_PI;
     }
 }

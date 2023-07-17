@@ -72,7 +72,7 @@ namespace math
         ///
         /// \param src - source 3D vector
         ///
-        vector4(const vector3& src) : x(src.x), y(src.y), z(src.z), w(1.0f)
+        vector4(const vector3& src) : x(src.x), y(src.y), z(src.z), w(1)
         {
         }
 

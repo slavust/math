@@ -14,60 +14,60 @@ namespace math
     // -------------- CONSTANTS --------------
 
     /// Reflection about X axis matrix (2D)
-    static const matrix2x2 reflect2Dx(-1.0f, 0.0f,
-                                        0.0f, 1.0f);
+    static const matrix2x2 reflect2Dx(-1, 0,
+                                        0, 1);
 
 
     /// Reflection about Y axis matrix (2D)
-    static const matrix2x2 reflect2Dy(1.0f, 0.0f,
-                                       0.0f, -1.0f);
+    static const matrix2x2 reflect2Dy(1, 0,
+                                       0, -1);
 
 
     /// Reflection about X axis matrix (2D homogeneous)
-    static const matrix3x3 reflect2Dhx(-1.0f, 0.0f, 0.0f,
-                                        0.0f, 1.0f, 0.0f,
-                                        0.0f, 0.0f, 1.0f);
+    static const matrix3x3 reflect2Dhx(-1, 0, 0,
+                                        0, 1, 0,
+                                        0, 0, 1);
 
 
     /// Reflection about Y axis matrix (2D homogeneous)
-    static const matrix3x3 reflect2Dhy(1.0f, 0.0f, 0.0f,
-                                        0.0f, -1.0f, 0.0f,
-                                        0.0f, 0.0f, 1.0f);
+    static const matrix3x3 reflect2Dhy(1, 0, 0,
+                                        0, -1, 0,
+                                        0, 0, 1);
 
 
     /// Reflection about XY plane matrix (3D)
-    static const matrix3x3 reflect3Dxy(1.0f, 0.0f, 0.0f,
-                                        0.0f, 1.0f, 0.0f,
-                                        0.0f, 0.0f, -1.0f);
+    static const matrix3x3 reflect3Dxy(1, 0, 0,
+                                        0, 1, 0,
+                                        0, 0, -1);
 
 
     /// Reflection about XZ plane matrix (3D)
-    static const matrix3x3 reflect3Dxz(1.0f, 0.0f, 0.0f,
-                                       0.0f, -1.0f, 0.0f,
-                                       0.0f, 0.0f, 1.0f);
+    static const matrix3x3 reflect3Dxz(1, 0, 0,
+                                       0, -1, 0,
+                                       0, 0, 1);
 
 
     /// Reflection about YZ plane matrix (3D)
-    static const matrix3x3 reflect3Dyz(-1.0f, 0.0f, 0.0f,
-                                        0.0f, 1.0f, 0.0f,
-                                        0.0f, 0.0f, 1.0f);
+    static const matrix3x3 reflect3Dyz(-1, 0, 0,
+                                        0, 1, 0,
+                                        0, 0, 1);
 
 
     /// Projection to XY plane matrix (3D)
-    static const matrix3x3 project3Dxy(1.0f, 0.0f, 0.0f,
-                                       0.0f, 1.0f, 0.0f,
-                                       0.0f, 0.0f, 0.0f);
+    static const matrix3x3 project3Dxy(1, 0, 0,
+                                       0, 1, 0,
+                                       0, 0, 0);
 
 
     /// Projection to XZ plane matrix (3D)
-    static const matrix3x3 project3Dxz(1.0f, 0.0f, 0.0f,
-                                       0.0f, 0.0f, 0.0f,
-                                       0.0f, 0.0f, 1.0f);
+    static const matrix3x3 project3Dxz(1, 0, 0,
+                                       0, 0, 0,
+                                       0, 0, 1);
 
     /// Projection to YZ plane matrix (3D)
-    static const matrix3x3 project3Dyz(0.0f, 0.0f, 0.0f,
-                                       0.0f, 1.0f, 0.0f,
-                                       0.0f, 0.0f, 1.0f);
+    static const matrix3x3 project3Dyz(0, 0, 0,
+                                       0, 1, 0,
+                                       0, 0, 1);
 
 
     // -------------- FUNCTIONS --------------
@@ -96,9 +96,9 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix3x3(_cos, -_sin, 0.0f,
-                         _sin, _cos, 0.0f,
-                         0.0f, 0.0f, 1.0f);
+        return matrix3x3(_cos, -_sin, 0,
+                         _sin, _cos, 0,
+                         0, 0, 1);
     }
 
 
@@ -110,8 +110,8 @@ namespace math
     ///
     inline matrix2x2 scale2D(real scale_x, real scale_y)
     {
-        return matrix2x2(scale_x, 0.0f,
-                         0.0f, scale_y);
+        return matrix2x2(scale_x, 0,
+                         0, scale_y);
     }
 
 
@@ -133,9 +133,9 @@ namespace math
     ///
     inline matrix3x3 scale2Dh(real scale_x, real scale_y)
     {
-        return matrix3x3(scale_x, 0.0f, 0.0f,
-                         0.0f, scale_y, 0.0f,
-                         0.0f,    0.0f, 1.0f);
+        return matrix3x3(scale_x, 0, 0,
+                         0, scale_y, 0,
+                         0,    0, 1);
     }
 
 
@@ -158,9 +158,9 @@ namespace math
     ///
     inline matrix3x3 translate2D(real translate_x, real translate_y)
     {
-        return matrix3x3(1.0f, 0.0f, 0.0f,
-                         0.0f, 1.0f, 0.0f,
-                         translate_x, translate_y, 1.0f);
+        return matrix3x3(1, 0, 0,
+                         0, 1, 0,
+                         translate_x, translate_y, 1);
     }
 
 
@@ -185,9 +185,9 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix3x3(1.0f, 0.0f, 0.0f,
-                         0.0f, _cos, _sin,
-                         0.0f, -_sin, _cos);
+        return matrix3x3(1, 0, 0,
+                         0, _cos, _sin,
+                         0, -_sin, _cos);
     }
 
     /// \brief Construct 4x4 matrix for rotation around X axis in 3d homogeneous space
@@ -200,10 +200,10 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix4x4(1.0f,  0.0f, 0.0f, 0.0f,
-                         0.0f, _cos, _sin, 0.0f,
-                         0.0f, -_sin, _cos, 0.0f,
-                         0.0f,  0.0f, 0.0f, 1.0f);
+        return matrix4x4(1,  0, 0, 0,
+                         0, _cos, _sin, 0,
+                         0, -_sin, _cos, 0,
+                         0,  0, 0, 1);
     }
 
 
@@ -217,9 +217,9 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix3x3(_cos, 0.0f, -_sin,
-                         0.0f, 1.0f,  0.0f,
-                         _sin, 0.0f,  _cos);
+        return matrix3x3(_cos, 0, -_sin,
+                         0, 1,  0,
+                         _sin, 0,  _cos);
     }
 
 
@@ -233,10 +233,10 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix4x4(_cos, 0.0f, -_sin, 0.0f,
-                         0.0f, 1.0f,  0.0f, 0.0f,
-                         _sin, 0.0f,  _cos, 0.0f,
-                         0.0f, 0.0f,  0.0f, 1.0f);
+        return matrix4x4(_cos, 0, -_sin, 0,
+                         0, 1,  0, 0,
+                         _sin, 0,  _cos, 0,
+                         0, 0,  0, 1);
     }
 
 
@@ -250,9 +250,9 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix3x3( _cos, _sin, 0.0f,
-                           -_sin, _cos, 0.0f,
-                           0.0f, 0.0f, 1.0f);
+        return matrix3x3( _cos, _sin, 0,
+                           -_sin, _cos, 0,
+                           0, 0, 1);
     }
 
 
@@ -266,10 +266,10 @@ namespace math
         real _cos = cos(angle);
         real _sin = sin(angle);
 
-        return matrix4x4( _cos, _sin, 0.0f, 0.0f,
-                          -_sin, _cos, 0.0f, 0.0f,
-                          0.0f, 0.0f, 1.0f, 0.0f,
-                          0.0f, 0.0f, 0.0f, 1.0f);
+        return matrix4x4( _cos, _sin, 0, 0,
+                          -_sin, _cos, 0, 0,
+                          0, 0, 1, 0,
+                          0, 0, 0, 1);
     }
 
 
@@ -282,9 +282,9 @@ namespace math
     ///
     inline matrix3x3 scale3D(real scale_x, real scale_y, real scale_z)
     {
-        return matrix3x3(scale_x, 0.0f, 0.0f,
-                         0.0f, scale_y, 0.0f,
-                         0.0f, 0.0f, scale_z);
+        return matrix3x3(scale_x, 0, 0,
+                         0, scale_y, 0,
+                         0, 0, scale_z);
     }
 
 
@@ -308,10 +308,10 @@ namespace math
     ///
     inline matrix4x4 scale3Dh(real scale_x, real scale_y, real scale_z)
     {
-        return matrix4x4(scale_x, 0.0f, 0.0f, 0.0f,
-                         0.0f, scale_y, 0.0f, 0.0f,
-                         0.0f, 0.0f, scale_z, 0.0f,
-                         0.0f, 0.0f,    0.0f, 1.0f);
+        return matrix4x4(scale_x, 0, 0, 0,
+                         0, scale_y, 0, 0,
+                         0, 0, scale_z, 0,
+                         0, 0,    0, 1);
     }
 
 
@@ -335,10 +335,10 @@ namespace math
     ///
     inline matrix4x4 translate3D(real x, real y, real z)
     {
-        return matrix4x4(1.0f, 0.0f, 0.0f, 0.0f,
-                         0.0f, 1.0f, 0.0f, 0.0f,
-                         0.0f, 0.0f, 1.0f, 0.0f,
-                            x,    y,    z, 1.0f);
+        return matrix4x4(1, 0, 0, 0,
+                         0, 1, 0, 0,
+                         0, 0, 1, 0,
+                            x,    y,    z, 1);
     }
 
 

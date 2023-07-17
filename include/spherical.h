@@ -22,7 +22,7 @@ namespace math
         ///
         /// Initializes r, theta and phi with zero
         ///
-        spherical() : r(0.0f), theta(0.0f), phi(0.0f)
+        spherical() : r(0), theta(0), phi(0)
         {
         }
 

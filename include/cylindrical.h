@@ -21,7 +21,7 @@ namespace math
         ///
         /// Initializes rho, phi and z with zero
         ///
-        cylindrical() : rho(0.0f), phi(0.0f), z(0.0f)
+        cylindrical() : rho(0), phi(0), z(0)
         {
         }
 
