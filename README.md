@@ -1,6 +1,8 @@
 # Math for computer graphics #
 Version 0.8
 
+**Please note: no unit tests yet!**
+
 ### Description ###
 
 * Object-oriented
