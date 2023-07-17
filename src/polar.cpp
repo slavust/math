@@ -5,7 +5,7 @@ namespace math
 {
     polar::operator vector2 () const
     {
-        return vector2(rho*cos(phi), rho*sin(phi));
+        return vector2((real)rho*cos(phi), (real)rho*sin(phi));
     }
 
     void polar::canonize()
@@ -25,19 +25,20 @@ namespace math
             }
             if(fabs(phi) > PI) // phi out of range
             {
-                //make phi within range [-PI, PI)
+                //make phi within range (-PI, PI]
 
                 // offset by PI
-                // maps from -PI*n > phi > PI*n to -TWO_PI*(n-1)/2 > phi > TWO_PI*(n+1)/2
+                // maps phi from -PI*n < phi < PI*n to -TWO_PI*(n-1)/2 < phi < TWO_PI*(n+1)/2
                 //phi += PI;
 
                 // subtract signed TWO_PI portions
                 //phi -= floor((phi) / TWO_PI) * TWO_PI; // 0<=phi<TWO_PI
-                phi -= floor((phi + PI) / TWO_PI) * TWO_PI;
 
                 // undo offset
                 // maps from 0<=phi<TWO_PI to -PI<=phi<PI
                 //phi -= PI;
+
+                phi -= floor((phi + PI) / TWO_PI) * TWO_PI;
             }
         }
     }

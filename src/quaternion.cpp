@@ -68,7 +68,7 @@ namespace math
         rot[0][3] = 0.0f;
 
         rot[1][0] = 2.0f*x*y - 2.0f*w*z;
-        rot[1][1] = 1.0f - w*x*x - 2.0f*z*z;
+        rot[1][1] = 1.0f - 2.0f*x*x - 2.0f*z*z;
         rot[1][2] = 2.0f*y*z + 2.0f*w*x;
         rot[1][3] = 0.0f;
 
@@ -139,7 +139,7 @@ namespace math
 
         real d = dot(q);
 
-        //choose signes of q1 and q2 such as q1.dot(q2) >= 0;
+        //choose signs of q1 and q2 such as q1.dot(q2) >= 0;
         if(d < 0)
         {
             q = -q;

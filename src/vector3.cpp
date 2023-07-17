@@ -7,7 +7,7 @@ namespace math
     const vector3 vector3::ZERO(0.0f, 0.0f, 0.0f);
     const vector3 vector3::UNIT_X(1.0f, 0.0f, 0.0f);
     const vector3 vector3::UNIT_Y(0.0f, 1.0f, 0.0f);
-    const vector3 vector3::UNIT_Z(0.0f, 0.0f, 0.0f);
+    const vector3 vector3::UNIT_Z(0.0f, 0.0f, 1.0f);
     const vector3 vector3::UNIT_SCALE(1.0f, 1.0f, 1.0f);
 
     vector3::operator cylindrical () const
