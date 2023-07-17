@@ -6,7 +6,7 @@
 
 namespace math
 {
-    constexpr real PI = 3.14159265358979323846f;
+    constexpr real PI = static_cast<real>(3.14159265358979323846);
     constexpr real TWO_PI = PI*2.0f;
     constexpr real PI_TWO = PI/2.0f;
 

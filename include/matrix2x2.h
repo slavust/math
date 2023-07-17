@@ -250,18 +250,12 @@ namespace math
 
     inline matrix2x2 matrix2x2::operator / (real scalar) const
     {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         return matrix2x2(val[0][0] / scalar, val[0][1] / scalar,
                          val[1][0] / scalar, val[1][1] / scalar);
     }
 
     inline matrix2x2& matrix2x2::operator /= (real scalar)
     {
-#ifdef MATH_CHECK_DIVISION
-            if(scalar == 0.0f) MATH_EXCEPTION(ET_DIVIDE_BY_ZERO);
-#endif // MATH_CHECK_DIVISION
         val[0][0] /= scalar;
         val[0][1] /= scalar;
         val[1][0] /= scalar;
