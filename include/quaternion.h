@@ -193,10 +193,12 @@ namespace math
 
         quaternion operator * (const quaternion& q) const
         {
-            return quaternion(w*q.w - x*q.x - y*q.y - z*q.z,
-                              q.y*z - q.z*y + q.w*x + w*q.x,
-                              q.z*x - q.x*z + q.w*y + w*q.y,
-                              q.x*y - q.y*x + q.w*z + w*q.z);
+            vector3 v1(x, y, z);
+            vector3 v2(q.x, q.y, q.z);
+            vector3 rv = v1.cross(v2) + q.w*v1 + w*v2;
+
+            return quaternion(w*q.w - v1.dot(v2),
+                              rv.x, rv.y, rv.z);
         }
 
         /// \brief Quaternion by vector multiplication.

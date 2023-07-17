@@ -9,7 +9,7 @@ namespace math
     class vector3;
 
     /// \brief Vector in cylindrical coordinate system (3D).
-    /// Axis corresponds to +X in Cartesian 3D system.
+    /// Polar axis corresponds to +X in Cartesian 3D system.
     class cylindrical
     {
     public:
