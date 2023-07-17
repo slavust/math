@@ -14,7 +14,7 @@ namespace math
     using real = float;
 #endif
 
-    constexpr real EPS = std::sqrt(std::numeric_limits<real>::epsilon());
+    static const real EPS = std::sqrt(std::numeric_limits<real>::epsilon());
 
     constexpr real sign(real s)
     {

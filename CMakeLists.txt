@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.14)
 
 project(math)
 
@@ -18,3 +18,5 @@ set(MATH_SRC
 
 add_library(math STATIC ${MATH_SRC})
 target_include_directories(math PUBLIC include)
+
+add_subdirectory(test)
