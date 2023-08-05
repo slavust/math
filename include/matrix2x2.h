@@ -168,29 +168,6 @@ namespace math
         {
             return val[indx];
         }
-
-        /// \brief Pointer to array of elements
-        ///
-        /// \return real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        real* ptr()
-        {
-            return reinterpret_cast<real*>(val);
-        }
-
-
-        /// \brief Pointer to constant array of elements
-        ///
-        /// \return real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        const real* ptr() const
-        {
-            return reinterpret_cast<const real*>(val);
-        }
     };
 
     inline matrix2x2 operator * (real scalar, const matrix2x2& m)
