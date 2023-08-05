@@ -2,6 +2,7 @@
 #define VECTOR2_H_INCLUDED
 
 #include "math_predefs.h"
+#include <array>
 
 namespace math
 {
@@ -12,7 +13,7 @@ namespace math
     class vector2
     {
     public:
-        real x,y; ///< components
+        real x, y; ///< components
 
         static const vector2 ZERO; ///< zero vector
         static const vector2 UNIT_X; ///< unit vector along X axis
@@ -22,9 +23,7 @@ namespace math
 
         /// \brief Default constructor
         ///
-        /// Initializes components with zero
-        ///
-        vector2() : x(0), y(0)
+        vector2()
         {
         }
 
@@ -42,7 +41,7 @@ namespace math
         ///
         /// \param src - array of two elements
         ///
-        vector2(const real src[2]) : x(src[0]), y(src[1])
+        vector2(const std::array<real, 2>& src) : x(src[0]), y(src[1])
         {
         }
 
@@ -124,40 +123,6 @@ namespace math
         real dot(const vector2& v) const
         {
             return x*v.x + y*v.y;
-        }
-
-
-        /// \brief Pointer to array of elements
-        ///
-        /// \return real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        real* ptr()
-        {
-            return &x;
-        }
-
-
-        /// \brief Pointer to constant array of elements
-        ///
-        /// \return const real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        const real* ptr() const
-        {
-            return &x;
-        }
-
-        real& operator [] (size_t indx)
-        {
-            return ptr()[indx];
-        }
-
-        real operator [] (size_t indx) const
-        {
-            return ptr()[indx];
         }
 
         vector2& operator = (const vector2& v)

@@ -8,7 +8,7 @@
 
 namespace math
 {
-#ifdef SMALLMATH_DOUBLE_PRECISION
+#ifdef MATH_DOUBLE_PRECISION
     using real = double;
 #else
     using real = float;

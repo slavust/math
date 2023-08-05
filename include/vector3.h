@@ -2,6 +2,7 @@
 #define VECTOR3_H_INCLUDED
 
 #include "math_predefs.h"
+#include <array>
 
 namespace math
 {
@@ -46,7 +47,7 @@ namespace math
         ///
         /// \param src - array of three elements
         ///
-        vector3(const real src[3]) : x(src[0]), y(src[1]), z(src[2])
+        vector3(const std::array<reeal, 3>& src) : x(src[0]), y(src[1]), z(src[2])
         {
         }
 
@@ -149,39 +150,6 @@ namespace math
             return vector3(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
         }
 
-
-        /// \brief Pointer to array of elements
-        ///
-        /// \return real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        real* ptr()
-        {
-            return &x;
-        }
-
-
-        /// \brief Pointer to constant array of elements
-        ///
-        /// \return const real*
-        ///
-        /// Useful for copying with memcpy etc.
-        ///
-        const real* ptr() const
-        {
-            return &x;
-        }
-
-        real& operator [] (size_t indx)
-        {
-            return ptr()[indx];
-        }
-
-        real operator [] (size_t indx) const
-        {
-            return ptr()[indx];
-        }
 
         bool operator == (const vector3& v) const
         {
