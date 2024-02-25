@@ -8,35 +8,37 @@
 
 namespace math
 {
-    class euler;
-    class quaternion;
-
     /// \brief 3x3 Matrix
     ///
     /// Used for linear transformations in 3D space and
     /// affine transformations in 2D homogeneous space
     ///
+    template <typename T>
     class matrix3x3
     {
     protected:
-        real val[3][3]; ///< matrix elements
+        std::array<std::array<T, 3>, 3>  val; ///< matrix elements
 
     public:
-        static const matrix3x3 IDENTITY; ///< Identity matrix
+        static constexpr matrix3x3<T> IDENTITY {1, 0, 0, 0, 1, 0, 0, 0, 1}; ///< Identity matrix
 
 
         /// \brief Default constructor
         ///
         /// Lefts matrix elements unitialized
         ///
-        matrix3x3();
+        constexpr matrix3x3(): matrix3x3(IDENTITY)
+        {
+        }
 
 
         /// \brief Copy constructor
         ///
         /// \param src: source 3x3 matrix
         ///
-        matrix3x3(const matrix3x3& src);
+        constexpr matrix3x3(const matrix3x3<T>& src) : val(src.val)
+        {
+        }
 
         /// \brief construct matrix from three column vectors as follows:
         /// [p.x q.x r.x
@@ -47,46 +49,46 @@ namespace math
         /// \param q: 2nd vector
         /// \param r: 3rd vector
         ///
-        matrix3x3(const vector3& p, const vector3& q, const vector3& r);
-
-        /// \brief Initializes matrix elements with corresponding array elements
-        ///
-        /// \param src: 3x3 array
-        ///
-        matrix3x3(const real src[3][3]);
+        constexpr matrix3x3(const vector3<T>& p, const vector3<T>& q, const vector3<T>& r)
+        : val({{p.x, p.y, p.z}, {q.x, q.y, q.z}, {r.x, r.y, r.z}})
+        {
+        }
 
 
         /// \brief Initializes matrix with a00-a22 elements
         ///
         /// \param a00-a22: elements of matrix starting with zero
         ///
-        matrix3x3(real a00, real a01, real a02,
-                  real a10, real a11, real a12,
-                  real a20, real a21, real a22);
-
-
-        /// \brief Convert rotation matrix to Euler angles
-        ///
-        operator euler() const;
-
-
-        /// \brief Convert rotation matrix to quaternion
-        ///
-        operator quaternion() const;
+        constexpr matrix3x3(T a00, T a01, T a02,
+                  T a10, T a11, T a12,
+                  T a20, T a21, T a22)
+                  : val({a00, a01, a02, a10, a11,a12, a20, a21, a22})
+        {
+        }
 
 
         /// \brief Constructs matrix transpose
         ///
         /// \return 3x3 matrix
         ///
-        matrix3x3 transpose() const;
+        constexpr matrix3x3<T> transposed() const
+        {
+        return matrix3x3<T>(val[0][0], val[1][0], val[2][0],
+                         val[0][1], val[1][1], val[2][1],
+                         val[0][2], val[1][2], val[2][2]);
+        }
 
 
         /// \brief Computes determinant of matrix
         ///
         /// \return determinant
         ///
-        real determinant() const;
+        constexpr T determinant() const
+        {
+            return val[0][0]*(val[1][1]*val[2][2] - val[2][1]*val[1][2])
+                + val[1][0]*(val[2][1]*val[0][2] - val[0][1]*val[2][2])
+                + val[2][0]*(val[0][1]*val[1][2] - val[1][1]*val[0][2]);
+        }
 
 
         /// \brief Constructs classical adjoint
@@ -96,7 +98,20 @@ namespace math
         /// Classical adjoint of matrix M is transpose of
         /// the matrix of cofactors of M.
         ///
-        matrix3x3 adjoint() const;
+        constexpr matrix3x3 adjoint() const
+        {
+            return matrix3x3<T>(val[1][1]*val[2][2] - val[2][1]*val[1][2],
+                            val[2][1]*val[0][2] - val[0][1]*val[2][2],
+                            val[0][1]*val[1][2] - val[1][1]*val[0][2],
+
+                            val[2][0]*val[1][2] - val[1][0]*val[2][2],
+                            val[0][0]*val[2][2] - val[2][0]*val[0][2],
+                            val[1][0]*val[0][2] - val[0][0]*val[1][2],
+
+                            val[1][0]*val[2][1] - val[2][0]*val[1][1],
+                            val[2][0]*val[0][1] - val[0][0]*val[2][1],
+                            val[0][0]*val[1][1] - val[1][0]*val[0][1]);
+        }
 
 
         /// \brief Constructs inverse of matrix
@@ -107,9 +122,9 @@ namespace math
         /// If determinant of M is zero, then M is non-invertible matrix.
         /// In this case exception ET_NON_INVERTIBLE_MATRIX is occurred.
         ///
-        matrix3x3 inverse() const
+        constexpr matrix3x3<T> inverse() const
         {
-            real d = determinant();
+            const T d = determinant();
             return adjoint() / d;
         }
 
@@ -118,38 +133,62 @@ namespace math
         ///
         /// Biased towards OX orthonormalization
         ///
-        void orthonormalize();
-
-
-        matrix3x3& operator = (const real src[3][3])
+        constexpr matrix3x3<T> orthonormalized() const
         {
-            memcpy(val, src, sizeof(real)*9);
+            const vector3<T> p(val[0][0], val[0][1], val[0][2]);
+            const vector3<T> q(val[1][0], val[1][1], val[1][2]);
+            const vector3<T> r(val[2][0], val[2][1], val[2][2]);
+
+            const auto pn = p.normalized();
+            const auto qn = (q - pn.dot(q)*pn).normalized();
+            const auto rn = (r - pn.dot(r)*pn - qn.dot(r)*qn).normalized();
+
+            return matrix3x3<T>(pn, qn, rn);
+        }
+
+        matrix3x3<T>& operator = (const matrix3x3<T>& src)
+        {
+            val = src.val;
             return *this;
         }
 
-        matrix3x3& operator = (const matrix3x3& src)
+        constexpr bool operator == (const matrix3x3<T>& op2) const
         {
-            memcpy(val, src.val, sizeof(real)*9);
-            return *this;
+            return val == op2.val;
         }
 
-        bool operator == (const real op2[3][3]) const
+        constexpr matrix3x3<T> operator * (T scalar) const
         {
-            return !memcmp(val, op2, sizeof(real)*9);
+            return matrix3x3<T>(
+                scalar * val[0][0], scalar * val[0][1], scalar * val[0][2],
+                scalar * val[1][0], scalar * val[1][1], scalar * val[1][2],
+                scalar * val[2][0], scalar * val[2][1], scalar * val[2][2]
+            );
         }
 
-        bool operator == (const matrix3x3& op2) const
+        matrix3x3<T>& operator *= (T scalar)
         {
-            return !memcmp(val, op2.val, sizeof(real)*9);
+            for(auto& arr : val)
+                for(auto& e : arr)
+                    e *= scalar;
+                return *this;
         }
 
-        matrix3x3 operator * (real scalar) const;
+        constexpr matrix3x3<T> operator / (T scalar) const
+        {
+            return matrix3x3<T>(
+                val[0][0] / scalar, val[0][1] / scalar, val[0][2] / scalar,
+                val[1][0] / scalar, val[1][1] / scalar, val[1][2] / scalar,
+                val[2][0] / scalar, val[2][1] / scalar, val[2][2] / scalar
+            );
+        }
 
-        matrix3x3& operator *= (real scalar);
-
-        matrix3x3 operator / (real scalar) const;
-
-        matrix3x3& operator /= (real scalar);
+        matrix3x3<T>& operator /= (T scalar)
+        {
+            for(auto& arr : val)
+                for(auto& e : arr)
+                    e /= scalar;
+        }
 
 
         /// \brief Multiple by column vector
@@ -157,113 +196,45 @@ namespace math
         /// \param v: 3D column vector
         /// \return 3D column vector
         ///
-        vector3 operator * (const vector3& v) const;
+        constexpr vector3<T> operator * (const vector3<T>& v) const
+        {
+            return vector3<T>(val[0][0]*v.x + val[1][0]*v.y + val[2][0]*v.z,
+                        val[0][1]*v.x + val[1][1]*v.y + val[2][1]*v.z,
+                        val[0][2]*v.x + val[1][2]*v.y + val[2][2]*v.z);
+        }
 
-        matrix3x3 operator * (const matrix3x3& b) const;
+        constexpr matrix3x3<T> operator * (const matrix3x3<T>& m) const
+        {
+            return matrix3x3<T>(m[0][0]*val[0][0] + m[1][0]*val[0][1] + m[2][0]*val[0][2],
+                            m[0][1]*val[0][0] + m[1][1]*val[0][1] + m[2][1]*val[0][2],
+                            m[0][2]*val[0][0] + m[1][2]*val[0][1] + m[2][2]*val[0][2],
 
-        matrix3x3& operator *= (const matrix3x3& b)
+                            m[0][0]*val[1][0] + m[1][0]*val[1][1] + m[2][0]*val[1][2],
+                            m[0][1]*val[1][0] + m[1][1]*val[1][1] + m[2][1]*val[1][2],
+                            m[0][2]*val[1][0] + m[1][2]*val[1][1] + m[2][2]*val[1][2],
+
+                            m[0][0]*val[2][0] + m[1][0]*val[2][1] + m[2][0]*val[2][2],
+                            m[0][1]*val[2][0] + m[1][1]*val[2][1] + m[2][1]*val[2][2],
+                            m[0][2]*val[2][0] + m[1][2]*val[2][1] + m[2][2]*val[2][2]
+                            );
+        }
+
+        matrix3x3<T>& operator *= (const matrix3x3<T>& b)
         {
             *this = *this * b;
             return *this;
         }
 
-        real* operator [] (size_t indx)
+        std::array<T, 3>& operator [] (size_t indx)
         {
             return val[indx];
         }
 
-        const real* operator [] (size_t indx) const
+        constexpr const std::array<T, 3>& operator [] (size_t indx) const
         {
             return val[indx];
         }
-
-        /// \brief Convert rotation matrix to Euler angles
-        ///
-        /// \return euler
-        ///
-        euler toEuler() const;
-
-
-        /// \brief Convert rotation matrix to quaternion
-        ///
-        /// \return quaternion
-        ///
-        quaternion toQuaternion() const;
     };
-
-    inline matrix3x3 operator * (real scalar, const matrix3x3& m)
-    {
-        return m*scalar;
-    }
-
-
-    inline matrix3x3::matrix3x3()
-    {
-    }
-
-    inline matrix3x3::matrix3x3(const real src[3][3])
-    {
-        memcpy(val, src, sizeof(real)*9);
-    }
-
-    inline matrix3x3::matrix3x3(const matrix3x3& src)
-    {
-        memcpy(val, src.val, sizeof(real)*9);
-    }
-
-    inline matrix3x3::matrix3x3(const vector3& p, const vector3& q, const vector3& r)
-    {
-        val[0][0] = p.x;
-        val[0][1] = p.y;
-        val[0][2] = p.z;
-
-        val[1][0] = q.x;
-        val[1][1] = q.y;
-        val[1][2] = q.z;
-
-        val[2][0] = r.x;
-        val[2][1] = r.y;
-        val[2][2] = r.z;
-    }
-
-    inline matrix3x3::matrix3x3(real a00, real a01, real a02,
-              real a10, real a11, real a12,
-              real a20, real a21, real a22)
-    {
-        val[0][0] = a00;
-        val[0][1] = a01;
-        val[0][2] = a02;
-
-        val[1][0] = a10;
-        val[1][1] = a11;
-        val[1][2] = a12;
-
-        val[2][0] = a20;
-        val[2][1] = a21;
-        val[2][2] = a22;
-    }
-
-    inline vector3 matrix3x3::operator * (const vector3& v) const
-    {
-        return vector3(val[0][0]*v.x + val[1][0]*v.y + val[2][0]*v.z,
-                       val[0][1]*v.x + val[1][1]*v.y + val[2][1]*v.z,
-                       val[0][2]*v.x + val[1][2]*v.y + val[2][2]*v.z);
-    }
-
-    inline matrix3x3 matrix3x3::transpose() const
-    {
-        return matrix3x3(val[0][0], val[1][0], val[2][0],
-                         val[0][1], val[1][1], val[2][1],
-                         val[0][2], val[1][2], val[2][2]);
-    }
-
-    inline real matrix3x3::determinant() const
-    {
-        return val[0][0]*(val[1][1]*val[2][2] - val[2][1]*val[1][2])
-                + val[1][0]*(val[2][1]*val[0][2] - val[0][1]*val[2][2])
-                + val[2][0]*(val[0][1]*val[1][2] - val[1][1]*val[0][2]);
-    }
-
 } // namespace math
 
 #endif // MATRIX3X3_H_INCLUDED

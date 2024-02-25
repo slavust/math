@@ -6,22 +6,21 @@
 
 namespace math
 {
-    class vector3;
-
     /// \brief Vector in cylindrical coordinate system (3D).
     /// Polar axis corresponds to +X in Cartesian 3D system.
+    template <typename T>
     class cylindrical
     {
     public:
-        real rho;///< radius
-        real phi;///< azimuth (radians)
-        real z;///< height
+        T rho;///< radius
+        T phi;///< azimuth (radians)
+        T z;///< height
 
         /// \brief Default constructor.
         ///
         /// Initializes rho, phi and z with zero
         ///
-        cylindrical() : rho(0), phi(0), z(0)
+        constexpr cylindrical() : rho(0), phi(0), z(0)
         {
         }
 
@@ -31,13 +30,9 @@ namespace math
         /// \param phi real: angle (radians)
         /// \param z real: height
         ///
-        cylindrical(real rho, real phi, real z) : rho(rho), phi(phi), z(z)
+        constexpr cylindrical(T rho, T phi, T z) : rho(rho), phi(phi), z(z)
         {
         }
-
-        /// \brief Convertion to 3D Cartesian coordinate system
-        ///
-        operator vector3 () const;
 
         /// \brief Canonize coordinates
         ///
@@ -48,7 +43,28 @@ namespace math
         /// -PI < phi <= PI,
         /// at rho=0 phi=0.
         ///
-        void canonize();
+        void canonize()
+        {
+            if(rho == 0.0f) // at the origin
+            {
+                // at rho==0.0f phi = 0.0f
+                phi = 0.0f;
+            }
+            else
+            {
+                if(rho < 0.0f) // negative distance
+                {
+                    //make positive distance
+                    rho = -rho;
+                    phi += pi<T>();
+                }
+                if(abs(phi) > pi<T>()) // phi out of range
+                {
+                    //make phi within range [-PI, PI)
+                    phi -= floor((phi + pi<T>()) / (2 * pi<T>())) * 2 * pi<T>();
+                }
+            }
+        }
     };
 } // namespace math
 

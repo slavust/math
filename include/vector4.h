@@ -9,32 +9,25 @@ namespace math
 {
     /// \brief Vector in 3D homogeneous coordinate system
     ///
+    template <typename T>
     class vector4
     {
     public:
-        real x, y, z, w; ///< components
+        T x, y, z, w; ///< components
 
-        static const vector4 ZERO; ///< zero vector
-        static const vector4 UNIT_X; ///< unit vector along X axis
-        static const vector4 UNIT_Y; ///< unit vector along Y axis
-        static const vector4 UNIT_Z; ///< unit vector along Z axis
-        static const vector4 UNIT_W; ///< unit vector along W axis
-        static const vector4 UNIT_SCALE;  ///< vector with all components unit
+        static constexpr vector4<T> ZERO {0, 0, 0, 0}; ///< zero vector
+        static constexpr vector4<T> UNIT_X {1, 0, 0, 1}; ///< unit vector along X axis
+        static constexpr vector4<T> UNIT_Y {0, 1, 0, 1}; ///< unit vector along Y axis
+        static constexpr vector4<T> UNIT_Z {0, 0, 1, 1}; ///< unit vector along Z axis
+        static constexpr vector4<T> UNIT_W {0, 0, 0, 1}; ///< unit vector along W axis
+        static constexpr vector4<T> UNIT_SCALE {1, 1, 1, 1};  ///< vector with all components unit
 
 
         /// \brief Default constructor
         ///
-        /// Initializes components with zero
+        /// Initializes components with zero (except unit w)
         ///
-        vector4() : x(0), y(0), z(0), w(0)
-        {
-        }
-
-        /// \brief Initializes all components by scalar
-        ///
-        /// \param scalar - scalar
-        ///
-        vector4(real scalar) : x(scalar), y(scalar), z(scalar), w(scalar)
+        constexpr vector4() : x(0), y(0), z(0), w(1)
         {
         }
 
@@ -46,7 +39,7 @@ namespace math
         /// \param z - z component
         /// \param w - w component
         ///
-        vector4(real x, real y, real z, real w) : x(x), y(y), z(z), w(w)
+        vector4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w)
         {
         }
 
@@ -55,7 +48,7 @@ namespace math
         ///
         /// \param src - array of three elements
         ///
-        vector4(const std::array<real, 4>& src) : x(src[0]), y(src[1]), z(src[2]), w(src[3])
+        constexpr vector4(const std::array<T, 4>& src) : x(src[0]), y(src[1]), z(src[2]), w(src[3])
         {
         }
 
@@ -64,30 +57,36 @@ namespace math
         ///
         /// \param src - source 3D homogeneous vector
         ///
-        vector4(const vector4& src) : x(src.x), y(src.y), z(src.z), w(src.w)
+        constexpr vector4(const vector4<T>& src) : x(src.x), y(src.y), z(src.z), w(src.w)
         {
         }
 
 
-        /// \brief Initializes components x, y, z, w with corresponding src elements and w = 1.0f
+        /// \brief Initializes components x, y, z, w with corresponding src elements and w = 1
         ///
         /// \param src - source 3D vector
         ///
-        vector4(const vector3& src) : x(src.x), y(src.y), z(src.z), w(1)
+        constexpr vector4(const vector3<T>& src) : x(src.x), y(src.y), z(src.z), w(1)
         {
         }
 
-        bool operator == (const vector4& v) const
+        /// convertion operator to vector3
+        constexpr operator vector3<T>() const
+        {
+            return vector3<T>{x / w, y / w, z / w};
+        }
+
+        constexpr bool operator == (const vector4<T>& v) const
         {
             return x == v.x && y == v.y && z == v.z && w == v.w;
         }
 
-        bool operator != (const vector4& v) const
+        constexpr bool operator != (const vector4<T>& v) const
         {
             return x != v.x || y != v.y || z != v.z || w != v.w;
         }
 
-        vector4& operator = (const vector4& v)
+        vector4& operator = (const vector4<T>& v)
         {
             x = v.x;
             y = v.y;
@@ -96,17 +95,17 @@ namespace math
             return *this;
         }
 
-        vector4 operator * (real scalar) const
+        constexpr vector4<T> operator * (T scalar) const
         {
-            return vector4(x * scalar, y * scalar, z * scalar, w * scalar);
+            return vector4<T>(x * scalar, y * scalar, z * scalar, w * scalar);
         }
 
-        vector4 operator / (real scalar) const
+        constexpr vector4<T> operator / (T scalar) const
         {
-            return vector4(x / scalar, y / scalar, z / scalar, w / scalar);
+            return vector4<T>(x / scalar, y / scalar, z / scalar, w / scalar);
         }
 
-        vector4& operator *= (real scalar)
+        vector4<T>& operator *= (T scalar)
         {
             x *= scalar;
             y *= scalar;
@@ -115,7 +114,7 @@ namespace math
             return *this;
         }
 
-        vector4& operator /= (real scalar)
+        vector4<T>& operator /= (T scalar)
         {
             x /= scalar;
             y /= scalar;
@@ -130,9 +129,9 @@ namespace math
         /// \param v: second operand
         /// \return 4D homogeneous vector
         ///
-        vector4 operator * (const vector4& v) const
+        constexpr vector4<T> operator * (const vector4<T>& v) const
         {
-            return vector4(x*v.x, y*v.y, z*v.z, w*v.w);
+            return vector4<T>(x*v.x, y*v.y, z*v.z, w*v.w);
         }
 
 
@@ -141,7 +140,7 @@ namespace math
         /// \param v: second operand
         /// \return 4D homogeneous vector
         ///
-        vector4& operator *= (const vector4& v)
+        vector4<T>& operator *= (const vector4<T>& v)
         {
             x *= v.x;
             y *= v.y;
@@ -156,9 +155,9 @@ namespace math
         /// \param v: second operand
         /// \return 4D homogeneous vector
         ///
-        vector4 operator / (const vector4& v) const
+        constexpr vector4 operator / (const vector4<T>& v) const
         {
-            return vector4(x/v.x, y/v.y, z/v.z, w/v.w);
+            return vector4<T>(x/v.x, y/v.y, z/v.z, w/v.w);
         }
 
         /// \brief Component-wise division
@@ -166,7 +165,7 @@ namespace math
         /// \param v: second operand
         /// \return 4D homogeneous vector
         ///
-        vector4& operator /= (const vector4& v)
+        vector4<T>& operator /= (const vector4<T>& v)
         {
             x /= v.x;
             y /= v.y;
@@ -176,27 +175,27 @@ namespace math
             return *this;
         }
 
-        const vector4& operator + () const
+        constexpr vector4<T> operator + () const
         {
-            return *this;
+            return this;
         }
 
-        vector4 operator - () const
+        constexpr vector4<T> operator - () const
         {
-            return vector4(-x, -y, -z, -w);
+            return vector4<T>(-x, -y, -z, -w);
         }
 
-        vector4 operator + (const vector4& v) const
+        constexpr vector4 operator + (const vector4& v) const
         {
-            return vector4(x + v.x, y + v.y, z + v.z, w + v.w);
+            return vector4<T>(x + v.x, y + v.y, z + v.z, w + v.w);
         }
 
-        vector4 operator - (const vector4& v) const
+        constexpr vector4<T> operator - (const vector4& v) const
         {
-            return vector4(x - v.x, y - v.y, z - v.z, w - v.w);
+            return vector4<T>(x - v.x, y - v.y, z - v.z, w - v.w);
         }
 
-        vector4& operator += (const vector4& v)
+        vector4<T>& operator += (const vector4<T>& v)
         {
             x += v.x;
             y += v.y;
@@ -205,7 +204,7 @@ namespace math
             return *this;
         }
 
-        vector4& operator -= (const vector4& v)
+        vector4<T>& operator -= (const vector4<T>& v)
         {
             x -= v.x;
             y -= v.y;
@@ -215,11 +214,11 @@ namespace math
         }
     };
 
-    inline vector4 operator * (real scalar, const vector4& v)
+    template <typename T>
+    inline vector4<T> operator * (T scalar, const vector4<T>& v)
     {
-        return v*scalar;
+        return v * scalar;
     }
-
 } // namespace math
 
 #endif // VECTOR4_H_INCLUDED

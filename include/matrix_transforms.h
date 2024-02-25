@@ -14,60 +14,89 @@ namespace math
     // -------------- CONSTANTS --------------
 
     /// Reflection about X axis matrix (2D)
-    static const matrix2x2 reflect2Dx(-1, 0,
-                                        0, 1);
+    template<typename T>
+    constexpr matrix2x2<T> reflect_2Dx() {
+        return matrix2x2<T>(-1, 0,
+                            0, 1);
+    }
 
 
     /// Reflection about Y axis matrix (2D)
-    static const matrix2x2 reflect2Dy(1, 0,
-                                       0, -1);
+    template<typename T>
+    constexpr matrix2x2<T> reflect2Dy() {
+        return matrix2x2<T>(1, 0,
+                            0, -1);
+    }
 
 
     /// Reflection about X axis matrix (2D homogeneous)
-    static const matrix3x3 reflect2Dhx(-1, 0, 0,
-                                        0, 1, 0,
-                                        0, 0, 1);
+    template<typename T>
+    constexpr matrix3x3<T> reflect2Dhx() {
+        return matrix3x3<T>(-1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1);
+    }
 
 
     /// Reflection about Y axis matrix (2D homogeneous)
-    static const matrix3x3 reflect2Dhy(1, 0, 0,
-                                        0, -1, 0,
-                                        0, 0, 1);
+    template<typename T>
+    constexpr matrix3x3<T> reflect2Dhy() {
+        return matrix3x3<T>(1, 0, 0,
+                            0, -1, 0,
+                            0, 0, 1);
+    }
 
 
     /// Reflection about XY plane matrix (3D)
-    static const matrix3x3 reflect3Dxy(1, 0, 0,
-                                        0, 1, 0,
-                                        0, 0, -1);
+    template<typename T>
+    constexpr matrix3x3<T> reflect3Dxy() {
+        return matrix3x3<T>(1, 0, 0,
+                            0, 1, 0,
+                            0, 0, -1);
+    }
 
 
     /// Reflection about XZ plane matrix (3D)
-    static const matrix3x3 reflect3Dxz(1, 0, 0,
-                                       0, -1, 0,
-                                       0, 0, 1);
-
+    template<typename T>
+    constexpr matrix3x3<T> reflect3Dxz() {
+        return matrix3x3<T>(1, 0, 0,
+                            0, -1, 0,
+                            0, 0, 1);
+    }
 
     /// Reflection about YZ plane matrix (3D)
-    static const matrix3x3 reflect3Dyz(-1, 0, 0,
-                                        0, 1, 0,
-                                        0, 0, 1);
+    template<typename T>
+    constexpr matrix3x3<T> reflect3Dyz() {
+        return matrix3x3<T>(-1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1);
+    }
 
 
     /// Projection to XY plane matrix (3D)
-    static const matrix3x3 project3Dxy(1, 0, 0,
-                                       0, 1, 0,
-                                       0, 0, 0);
+    template<typename T>
+    constexpr matrix3x3<T> project3Dxy() {
+        return matrix3x3<T>(1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 0);
+    }
 
 
     /// Projection to XZ plane matrix (3D)
-    static const matrix3x3 project3Dxz(1, 0, 0,
-                                       0, 0, 0,
-                                       0, 0, 1);
+    template<typename T>
+    constexpr matrix3x3<T> project3Dxz() {
+        return matrix3x3<T>(1, 0, 0,
+                            0, 0, 0,
+                            0, 0, 1);
+    }
 
     /// Projection to YZ plane matrix (3D)
-    static const matrix3x3 project3Dyz(0, 0, 0,
-                                       0, 1, 0,
-                                       0, 0, 1);
+    template<typename T>
+    constexpr matrix3x3<T> project3Dyz() {
+        return matrix3x3<T>(0, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1);
+    }
 
 
     // -------------- FUNCTIONS --------------
@@ -77,10 +106,11 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 2x2 rotation matrix
     ///
-    inline matrix2x2 rotate2D(real angle)
+    template <typename T>
+    matrix2x2<T> rotate2D(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
         return matrix2x2(_cos, -_sin,
                           _sin, _cos);
@@ -91,12 +121,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 3x3 2D rotation matrix
     ///
-    inline matrix3x3 rotate2Dh(real angle)
+    template <typename T>
+    matrix3x3<T> rotate2Dh(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix3x3(_cos, -_sin, 0,
+        return matrix3x3<T>(_cos, -_sin, 0,
                          _sin, _cos, 0,
                          0, 0, 1);
     }
@@ -108,7 +139,8 @@ namespace math
     /// \param scale_y: amount of scale along Y axis
     /// \return 2x2 scale matrix
     ///
-    inline matrix2x2 scale2D(real scale_x, real scale_y)
+    template<typename T>
+    constexpr matrix2x2<T> scale2D(T scale_x, T scale_y)
     {
         return matrix2x2(scale_x, 0,
                          0, scale_y);
@@ -120,9 +152,10 @@ namespace math
     /// \param scale: amount of scale along X and Y axes
     /// \return 2x2 scale matrix
     ///
-    inline matrix2x2 scale2D(const vector2& scale)
+    template <typename T>
+    constexpr matrix2x2<T> scale2D(const vector2<T>& scale)
     {
-        return scale2D(scale.x, scale.y);
+        return scale2D<T>(scale.x, scale.y);
     }
 
     /// \brief Construct 3x3 matrix for scale in homogeneous 2D space
@@ -131,9 +164,10 @@ namespace math
     /// \param scale_y: amount of scale along Y axis
     /// \return 3x3 scale matrix
     ///
-    inline matrix3x3 scale2Dh(real scale_x, real scale_y)
+    template <typename T>
+    constexpr matrix3x3<T> scale2Dh(T scale_x, T scale_y)
     {
-        return matrix3x3(scale_x, 0, 0,
+        return matrix3x3<T>(scale_x, 0, 0,
                          0, scale_y, 0,
                          0,    0, 1);
     }
@@ -144,9 +178,10 @@ namespace math
     /// \param scale: amount of scale along X and Y axes
     /// \return 3x3 scale matrix
     ///
-    inline matrix3x3 scale2Dh(const vector2& scale)
+    template <typename T>
+    constexpr matrix3x3<T> scale2Dh(const vector2<T>& scale)
     {
-        return scale2Dh(scale.x, scale.y);
+        return scale2Dh<T>(scale.x, scale.y);
     }
 
 
@@ -156,9 +191,10 @@ namespace math
     /// \param translate_y: translation along Y axis
     /// \return 3x3 translation matrix
     ///
-    inline matrix3x3 translate2D(real translate_x, real translate_y)
+    template <typename T>
+    constexpr matrix3x3<T> translate2D(T translate_x, T translate_y)
     {
-        return matrix3x3(1, 0, 0,
+        return matrix3x3<T>(1, 0, 0,
                          0, 1, 0,
                          translate_x, translate_y, 1);
     }
@@ -169,9 +205,10 @@ namespace math
     /// \param translate: translation along X and Y axes
     /// \return 3x3 translation matrix
     ///
-    inline matrix3x3 translate2D(const vector2& translate)
+    template <typename T>
+    constexpr matrix3x3<T> translate2D(const vector2<T>& translate)
     {
-        return translate2D(translate.x, translate.y);
+        return translate2D<T>(translate.x, translate.y);
     }
 
 
@@ -180,12 +217,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 3x3 rotation matrix
     ///
-    inline matrix3x3 rotate3Dx(real angle)
+    template <typename T>
+    matrix3x3<T> rotate3Dx(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix3x3(1, 0, 0,
+        return matrix3x3<T>(1, 0, 0,
                          0, _cos, _sin,
                          0, -_sin, _cos);
     }
@@ -195,12 +233,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 4x4 rotation matrix
     ///
-    inline matrix4x4 rotate3Dhx(real angle)
+    template <typename T>
+    inline matrix4x4<T> rotate3Dhx(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix4x4(1,  0, 0, 0,
+        return matrix4x4<T>(1,  0, 0, 0,
                          0, _cos, _sin, 0,
                          0, -_sin, _cos, 0,
                          0,  0, 0, 1);
@@ -212,12 +251,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 3x3 rotation matrix
     ///
-    inline matrix3x3 rotate3Dy(real angle)
+    template <typename T>
+    matrix3x3<T> rotate3Dy(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix3x3(_cos, 0, -_sin,
+        return matrix3x3<T>(_cos, 0, -_sin,
                          0, 1,  0,
                          _sin, 0,  _cos);
     }
@@ -228,12 +268,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 4x4 rotation matrix
     ///
-    inline matrix4x4 rotate3Dhy(real angle)
+    template <typename T>
+    matrix4x4<T> rotate3Dhy(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix4x4(_cos, 0, -_sin, 0,
+        return matrix4x4<T>(_cos, 0, -_sin, 0,
                          0, 1,  0, 0,
                          _sin, 0,  _cos, 0,
                          0, 0,  0, 1);
@@ -245,12 +286,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 3x3 rotation matrix
     ///
-    inline matrix3x3 rotate3Dz(real angle)
+    template <typename T>
+    matrix3x3<T> rotate3Dz(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix3x3( _cos, _sin, 0,
+        return matrix3x3<T>( _cos, _sin, 0,
                            -_sin, _cos, 0,
                            0, 0, 1);
     }
@@ -261,12 +303,13 @@ namespace math
     /// \param angle: amount of rotation in radians
     /// \return 4x4 rotation matrix
     ///
-    inline matrix4x4 rotate3Dhz(real angle)
+    template <typename T>
+    matrix4x4<T> rotate3Dhz(T angle)
     {
-        real _cos = cos(angle);
-        real _sin = sin(angle);
+        const T _cos = cos(angle);
+        const T _sin = sin(angle);
 
-        return matrix4x4( _cos, _sin, 0, 0,
+        return matrix4x4<T>( _cos, _sin, 0, 0,
                           -_sin, _cos, 0, 0,
                           0, 0, 1, 0,
                           0, 0, 0, 1);
@@ -280,9 +323,10 @@ namespace math
     /// \param scale_z: amount of scale along Z axis
     /// \return 3x3 scale matrix
     ///
-    inline matrix3x3 scale3D(real scale_x, real scale_y, real scale_z)
+    template <typename T>
+    constexpr matrix3x3<T> scale3D(T scale_x, T scale_y, T scale_z)
     {
-        return matrix3x3(scale_x, 0, 0,
+        return matrix3x3<T>(scale_x, 0, 0,
                          0, scale_y, 0,
                          0, 0, scale_z);
     }
@@ -293,9 +337,10 @@ namespace math
     /// \param scale: amount of scale along X, Y, Z axes
     /// \return 3x3 scale matrix
     ///
-    inline matrix3x3 scale3D(const vector3& scale)
+    template <typename T>
+    constexpr matrix3x3<T> scale3D(const vector3<T>& scale)
     {
-        return scale3D(scale.x, scale.y, scale.z);
+        return scale3D<T>(scale.x, scale.y, scale.z);
     }
 
 
@@ -306,9 +351,10 @@ namespace math
     /// \param scale_z: amount of scale along Z axis
     /// \return 4x4 scale matrix
     ///
-    inline matrix4x4 scale3Dh(real scale_x, real scale_y, real scale_z)
+    template <typename T>
+    constexpr matrix4x4<T> scale3Dh(T scale_x, T scale_y, T scale_z)
     {
-        return matrix4x4(scale_x, 0, 0, 0,
+        return matrix4x4<T>(scale_x, 0, 0, 0,
                          0, scale_y, 0, 0,
                          0, 0, scale_z, 0,
                          0, 0,    0, 1);
@@ -320,9 +366,10 @@ namespace math
     /// \param scale: amount of scale along X, Y and Z axes
     /// \return 4x4 scale matrix
     ///
-    inline matrix4x4 scale3Dh(const vector3& scale)
+    template <typename T>
+    constexpr matrix4x4<T> scale3Dh(const vector3<T>& scale)
     {
-        return scale3Dh(scale.x, scale.y, scale.z);
+        return scale3Dh<T>(scale.x, scale.y, scale.z);
     }
 
 
@@ -333,9 +380,10 @@ namespace math
     /// \param z: translation along z axis
     /// \return 4x4 translation matrix
     ///
-    inline matrix4x4 translate3D(real x, real y, real z)
+    template <typename T>
+    constexpr matrix4x4<T> translate3D(T x, T y, T z)
     {
-        return matrix4x4(1, 0, 0, 0,
+        return matrix4x4<T>(1, 0, 0, 0,
                          0, 1, 0, 0,
                          0, 0, 1, 0,
                             x,    y,    z, 1);
@@ -347,9 +395,10 @@ namespace math
     /// \param translate: translation along X, Y, and Z axes
     /// \return 4x4 translation matrix
     ///
-    inline matrix4x4 translate3D(const vector3& translate)
+    template <typename T>
+    constexpr matrix4x4<T> translate3D(const vector3<T>& translate)
     {
-        return translate3D(translate.x, translate.y, translate.z);
+        return translate3D<T>(translate.x, translate.y, translate.z);
     }
 
 
@@ -366,10 +415,11 @@ namespace math
     /// B1={p1,q1}, B2={p2,q2}) expressed using the same coordinate
     /// space, constructs rotation matrix from B1 to B2.
     ///
-    inline matrix2x2 direction_cosines(const vector2& p1, const vector2& q1,
-                                const vector2& p2, const vector2& q2)
+    template <typename T>
+    constexpr matrix2x2<T> direction_cosines(const vector2<T>& p1, const vector2<T>& q1,
+                                const vector2<T>& p2, const vector2<T>& q2)
     {
-        return matrix2x2(p1.dot(p2), q1.dot(p2),
+        return matrix2x2<T>(p1.dot(p2), q1.dot(p2),
                           p1.dot(q2), q1.dot(q2));
     }
 
@@ -389,10 +439,11 @@ namespace math
     /// B1={p1,q1,r1}, B2={p2,q2,r2}) expressed using the same coordinate
     /// space, constructs rotation matrix from B1 to B2.
     ///
-    inline matrix3x3 direction_cosines(const vector3& p1, const vector3& q1, const vector3& r1,
-                                const vector3& p2, const vector3& q2, const vector3& r2)
+    template <typename T>
+    constexpr matrix3x3<T> direction_cosines(const vector3<T>& p1, const vector3<T>& q1, const vector3<T>& r1,
+                                const vector3<T>& p2, const vector3<T>& q2, const vector3<T>& r2)
     {
-        return matrix3x3(p1.dot(p2), q1.dot(p2), r1.dot(p2),
+        return matrix3x3<T>(p1.dot(p2), q1.dot(p2), r1.dot(p2),
                          p1.dot(q2), q1.dot(q2), r1.dot(q2),
                          p1.dot(r2), q1.dot(r2), r1.dot(r2));
     }

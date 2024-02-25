@@ -1,47 +1,33 @@
-#ifndef VECTOR2_H_INCLUDED
-#define VECTOR2_H_INCLUDED
+#pragma once
 
 #include "math_predefs.h"
 #include <array>
 
 namespace math
 {
-    class polar;
-
-    /// \brief Vector in 2D Cartesian coordinate system
-    ///
+    template<typename T>
     class vector2
     {
     public:
-        real x, y; ///< components
+        T x, y; ///< components
 
-        static const vector2 ZERO; ///< zero vector
-        static const vector2 UNIT_X; ///< unit vector along X axis
-        static const vector2 UNIT_Y; ///< unit vector along Y axis
-        static const vector2 UNIT_SCALE; ///< unit vector along Z axis
+        static constexpr vector2<T> ZERO{0, 0}; ///< zero vector
+        static constexpr vector2<T> UNIT_X{1, 0}; ///< unit vector along X axis
+        static constexpr vector2<T> UNIT_Y{0, 1}; ///< unit vector along Y axis
+        static constexpr vector2<T> UNIT_SCALE{1, 1}; ///< unit vector along Z axis
 
 
         /// \brief Default constructor
         ///
-        vector2()
+        constexpr vector2(): x(0), y(0)
         {
         }
-
-
-        /// \brief Initializes all components by scalar
-        ///
-        /// \param scalar - scalar
-        ///
-        vector2(real scalar) : x(scalar), y(scalar)
-        {
-        }
-
 
         /// \brief Initializes components x, y with corresponding array elements
         ///
         /// \param src - array of two elements
         ///
-        vector2(const std::array<real, 2>& src) : x(src[0]), y(src[1])
+        constexpr vector2(const std::array<T, 2>& src) : x(src[0]), y(src[1])
         {
         }
 
@@ -51,32 +37,18 @@ namespace math
         /// \param x - x component
         /// \param y - y component
         ///
-        vector2(real x, real y) : x(x), y(y)
+        constexpr vector2(T x, T y) : x(x), y(y)
         {
         }
-
-
-        /// \brief Copy constructor
-        ///
-        /// \param src - source 2D vector
-        ///
-        vector2(const vector2& src) : x(src.x), y(src.y)
-        {
-        }
-
-
-        /// \brief Conversion to 2D polar coordinate system
-        ///
-        operator polar () const;
 
 
         /// \brief Magnitude of vector
         ///
         /// \return magnitude
         ///
-        /// Geometrycally magnitude of vector is it's length
+        /// Geometrically magnitude of vector is it's length
         ///
-        real magnitude() const
+        constexpr T magnitude() const
         {
             return sqrt(x*x + y*y);
         }
@@ -87,7 +59,7 @@ namespace math
         /// \param b: 2D vector
         /// \return distance
         ///
-        real distance(const vector2& b) const
+        constexpr T distance(const vector2<T>& b) const
         {
             return (b - *this).magnitude();
         }
@@ -99,15 +71,31 @@ namespace math
         ///
         /// Result is vector with the same direction and unit magnitude
         ///
-        real normalize()
+        constexpr T normalize()
         {
-            real m = magnitude();
+            const T m = magnitude();
 
             if(*this != ZERO)
             {
                 *this /= m;
             }
             return magnitude();
+        }
+
+        /// \brief Normalized copy of vector
+        ///
+        /// \return vector normalized vector
+        ///
+        /// Result is vector with the same direction and unit magnitude
+        ///
+        constexpr vector2<T> normalized() const
+        {
+            const T m = magnitude();
+
+            if(*this != ZERO)
+                return *this / m;
+
+            return *this;
         }
 
 
@@ -120,31 +108,31 @@ namespace math
         /// Geometrically, it is the product of the magnitudes of
         /// a, b and the cosine of the angle between them.
         ///
-        real dot(const vector2& v) const
+        constexpr T dot(const vector2<T>& v) const
         {
             return x*v.x + y*v.y;
         }
 
-        vector2& operator = (const vector2& v)
+        constexpr vector2<T>& operator = (const vector2<T>& v)
         {
             x = v.x;
             y = v.y;
             return *this;
         }
 
-        bool operator == (const vector2& v) const
+        constexpr bool operator == (const vector2<T>& v) const
         {
             return x == v.x && y == v.y;
         }
 
-        bool operator != (const vector2& v) const
+        constexpr bool operator != (const vector2<T>& v) const
         {
             return x != v.x || y != v.y;
         }
 
-        vector2 operator * (real scalar) const
+        constexpr vector2<T> operator * (T scalar) const
         {
-            return vector2(x * scalar, y * scalar);
+            return vector2<T>(x * scalar, y * scalar);
         }
 
         /// \brief Component-wise multiplication
@@ -152,17 +140,16 @@ namespace math
         /// \param v: second operand
         /// \return 2D vector
         ///
-        vector2 operator * (const vector2& v) const
+        constexpr vector2<T> operator * (const vector2<T>& v) const
         {
-            return vector2(x*v.x, y*v.y);
+            return vector2<T>(x*v.x, y*v.y);
         }
-
         /// \brief Component-wise multiplication
         ///
         /// \param v: second operand
         /// \return 2D vector
         ///
-        vector2& operator *= (const vector2& v)
+        vector2<T>& operator *= (const vector2<T>& v)
         {
             x *= v.x;
             y *= v.y;
@@ -174,9 +161,9 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector2 operator / (const vector2& v) const
+        constexpr vector2<T> operator / (const vector2<T>& v) const
         {
-            return vector2(x/v.x, y/v.y);
+            return vector2<T>(x/v.x, y/v.y);
         }
 
         /// \brief Component-wise division
@@ -184,7 +171,7 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector2& operator /= (const vector2& v)
+        vector2<T>& operator /= (const vector2<T>& v)
         {
             x /= v.x;
             y /= v.y;
@@ -192,53 +179,53 @@ namespace math
             return *this;
         }
 
-        vector2 operator / (real scalar) const
+        constexpr vector2<T> operator / (T scalar) const
         {
-            return vector2(x / scalar, y / scalar);
+            return vector2<T>(x / scalar, y / scalar);
         }
 
-        vector2& operator *= (real scalar)
+        vector2<T>& operator *= (T scalar)
         {
             x *= scalar;
             y *= scalar;
             return *this;
         }
 
-        vector2& operator /= (real scalar)
+        vector2<T>& operator /= (T scalar)
         {
             x /= scalar;
             y /= scalar;
             return *this;
         }
 
-        const vector2& operator + () const
+        constexpr vector2<T> operator + () const
         {
             return *this;
         }
 
-        vector2 operator - () const
+        constexpr vector2<T> operator - () const
         {
-            return vector2(-x, -y);
+            return vector2<T>(-x, -y);
         }
 
-        vector2 operator + (const vector2& v) const
+        constexpr vector2<T> operator + (const vector2<T>& v) const
         {
-            return vector2(x + v.x, y + v.y);
+            return vector2<T>(x + v.x, y + v.y);
         }
 
-        vector2 operator - (const vector2& v) const
+        constexpr vector2<T> operator - (const vector2<T>& v) const
         {
-            return vector2(x - v.x, y - v.y);
+            return vector2<T>(x - v.x, y - v.y);
         }
 
-        vector2& operator += (const vector2& v)
+        vector2<T>& operator += (const vector2<T>& v)
         {
             x += v.x;
             y += v.y;
             return *this;
         }
 
-        vector2& operator -= (const vector2& v)
+        vector2<T>& operator -= (const vector2<T>& v)
         {
             x -= v.x;
             y -= v.y;
@@ -246,11 +233,10 @@ namespace math
         }
     };
 
-    inline vector2 operator * (real scalar, const vector2& v)
+    template<typename T>
+    constexpr vector2<T> operator * (T scalar, const vector2<T>& v)
     {
-        return v*scalar;
+        return v * scalar;
     }
 
 } // namespace math
-
-#endif // VECTOR2_H_INCLUDED

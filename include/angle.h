@@ -6,18 +6,20 @@
 
 namespace math
 {
-    constexpr real PI = static_cast<real>(3.14159265358979323846);
-    constexpr real TWO_PI = PI * 2;
-    constexpr real PI_TWO = PI / 2;
+    template<typename T> constexpr T pi()
+    {
+        return static_cast<T>(M_PI); // todo: implement for higher precisions?
+    }
 
     /// \brief Convert degrees to radians
     ///
     /// \param degrees real: value in degrees
     /// \return real: value in radians
     ///
-    constexpr real toRadians(real degrees)
+    template <typename T>
+    constexpr T to_radians(T degrees)
     {
-        constexpr real _PI_180 = PI / 180;
+        constexpr T _PI_180 = pi<T>() / 180;
         return degrees * _PI_180;
     }
 
@@ -26,9 +28,10 @@ namespace math
     /// \param radians real: value in radians
     /// \return real: value in degrees
     ///
-    constexpr real toDegrees(real radians)
+    template <typename T>
+    constexpr T to_degrees(T radians)
     {
-        constexpr real _180_PI = 180 / PI;
+        constexpr T _180_PI = 180 / pi<T>();
         return radians * _180_PI;
     }
 }

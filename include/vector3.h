@@ -6,48 +6,34 @@
 
 namespace math
 {
-
-    class cylindrical;
-    class spherical;
-
     /// \brief Vector in 3D Cartesian
     /// or 2D homogeneous coordinate system
     ///
+    template<typename T>
     class vector3
     {
     public:
-        real x, y, z; ///< components
+        T x, y, z; ///< components
 
-        static const vector3 ZERO; ///< zero vector
-        static const vector3 UNIT_X; ///< unit vector along X axis
-        static const vector3 UNIT_Y; ///< unit vector along Y axis
-        static const vector3 UNIT_Z; ///< unit vector along Z axis
-        static const vector3 UNIT_SCALE;  ///< vector with all components unit
+        static constexpr vector3<T> ZERO {0, 0, 0}; ///< zero vector
+        static constexpr vector3<T> UNIT_X {1, 0, 0}; ///< unit vector along X axis
+        static constexpr vector3<T> UNIT_Y {0, 1, 0}; ///< unit vector along Y axis
+        static constexpr vector3<T> UNIT_Z {0, 0, 1}; ///< unit vector along Z axis
+        static constexpr vector3<T> UNIT_SCALE {1, 1, 1};  ///< vector with all components unit
 
 
         /// \brief Default constructor
         ///
         /// Initializes components with zero
         ///
-        vector3() : x(0), y(0), z(0)
-        {
-        }
-
-
-        /// \brief Initializes all components by scalar
-        ///
-        /// \param scalar - scalar
-        ///
-        vector3(real scalar) : x(scalar), y(scalar), z(scalar)
-        {
-        }
+        constexpr vector3() : x(0), y(0), z(0) {}
 
 
         /// \brief Initializes components x, y, z with corresponding array elements
         ///
         /// \param src - array of three elements
         ///
-        vector3(const std::array<reeal, 3>& src) : x(src[0]), y(src[1]), z(src[2])
+        vector3(const std::array<T, 3>& src) : x(src[0]), y(src[1]), z(src[2])
         {
         }
 
@@ -58,27 +44,14 @@ namespace math
         /// \param y - y component
         /// \param z - z component
         ///
-        vector3(real x, real y, real z) : x(x), y(y), z(z)
-        {
-        }
+        constexpr vector3(T x, T y, T z) : x(x), y(y), z(z) {}
 
 
         /// \brief Copy constructor
         ///
         /// \param src - source 3D vector
         ///
-        vector3(const vector3& src) : x(src.x), y(src.y), z(src.z)
-        {
-        }
-
-
-        /// \brief Convertion to cylindrical coordinate space
-        ///
-        operator cylindrical () const;
-
-        /// \brief Conversial to spherical coordinate space
-        ///
-        operator spherical () const;
+        constexpr vector3(const vector3<T>& src) : x(src.x), y(src.y), z(src.z) {}
 
 
         /// \brief Magnitude of vector
@@ -87,7 +60,7 @@ namespace math
         ///
         /// Geometrycally magnitude of vector is it's length
         ///
-        real magnitude() const
+        constexpr T magnitude() const
         {
             return sqrt(x*x + y*y + z*z);
         }
@@ -98,7 +71,7 @@ namespace math
         /// \param b: 3D vector
         /// \return distance
         ///
-        real distance(const vector3& b) const
+        constexpr T distance(const vector3<T>& b) const
         {
             return (b - *this).magnitude();
         }
@@ -110,15 +83,29 @@ namespace math
         ///
         /// Result is vector with the same direction and unit magnitude
         ///
-        real normalize()
+        T normalize()
         {
-            real m = magnitude();
+            const T m = magnitude();
 
             if(*this != ZERO)
             {
                 *this /= m;
             }
             return m;
+        }
+
+        constexpr vector3<T> normalized() const
+        {
+            const T m = magnitude();
+
+            if(*this != ZERO)
+            {
+                return *this / m;
+            }
+            else
+            {
+                return ZERO;
+            }
         }
 
 
@@ -131,7 +118,7 @@ namespace math
         /// Geometrically, it is the product of the magnitudes of
         /// a, b and the cosine of the angle between them.
         ///
-        real dot(const vector3& v) const
+        constexpr T dot(const vector3<T>& v) const
         {
             return x*v.x + y*v.y + z*v.z;
         }
@@ -145,24 +132,29 @@ namespace math
         /// The result of cross product of two 3D vectors a, b
         /// is perpependicular to both a and b.
         ///
-        vector3 cross(const vector3& v) const
+        constexpr vector3<T> cross(const vector3<T>& v) const
         {
-            return vector3(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
+            return vector3<T>(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
         }
 
+        /// conversion operator to vector2 in case if vector3 is used for translation in 2d
+        constexpr operator vector2<T>() const
+        {
+            return {x / z, y / z};
+        }
 
-        bool operator == (const vector3& v) const
+        constexpr bool operator == (const vector3<T>& v) const
         {
             return x == v.x && y == v.y && z == v.z;
         }
 
-        bool operator != (const vector3& v) const
+        constexpr bool operator != (const vector3<T>& v) const
         {
             return x != v.x || y != v.y || z != v.z;
         }
 
 
-        vector3& operator = (const vector3& v)
+        vector3<T>& operator = (const vector3<T>& v)
         {
             x = v.x;
             y = v.y;
@@ -170,17 +162,17 @@ namespace math
             return *this;
         }
 
-        vector3 operator * (real scalar) const
+        constexpr vector3<T> operator * (T scalar) const
         {
-            return vector3(x * scalar, y * scalar, z * scalar);
+            return vector3<T>(x * scalar, y * scalar, z * scalar);
         }
 
-        vector3 operator / (real scalar) const
+        constexpr vector3<T> operator / (T scalar) const
         {
-            return vector3(x / scalar, y / scalar, z / scalar);
+            return vector3<T>(x / scalar, y / scalar, z / scalar);
         }
 
-        vector3& operator *= (real scalar)
+        vector3<T>& operator *= (T scalar)
         {
             x *= scalar;
             y *= scalar;
@@ -188,7 +180,7 @@ namespace math
             return *this;
         }
 
-        vector3& operator /= (real scalar)
+        vector3<T>& operator /= (T scalar)
         {
             x /= scalar;
             y /= scalar;
@@ -201,9 +193,9 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector3 operator * (const vector3& v) const
+        constexpr vector3<T> operator * (const vector3<T>& v) const
         {
-            return vector3(x*v.x, y*v.y, z*v.z);
+            return vector3<T>(x*v.x, y*v.y, z*v.z);
         }
 
         /// \brief Component-wise multiplication
@@ -211,7 +203,7 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector3& operator *= (const vector3& v)
+        vector3<T>& operator *= (const vector3<T>& v)
         {
             x *= v.x;
             y *= v.y;
@@ -225,9 +217,9 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector3 operator / (const vector3& v) const
+        constexpr vector3<T> operator / (const vector3<T>& v) const
         {
-            return vector3(x/v.x, y/v.y, z/v.z);
+            return vector3<T>(x/v.x, y/v.y, z/v.z);
         }
 
         /// \brief Component-wise division
@@ -235,7 +227,7 @@ namespace math
         /// \param v: second operand
         /// \return 3D vector
         ///
-        vector3& operator /= (const vector3& v)
+        vector3<T>& operator /= (const vector3<T>& v)
         {
             x /= v.x;
             y /= v.y;
@@ -244,27 +236,27 @@ namespace math
             return *this;
         }
 
-        const vector3& operator + () const
+        constexpr vector3<T> operator + () const
         {
             return *this;
         }
 
-        vector3 operator - () const
+        constexpr vector3<T> operator - () const
         {
-            return vector3(-x, -y, -z);
+            return vector3<T>(-x, -y, -z);
         }
 
-        vector3 operator + (const vector3& v) const
+        constexpr vector3<T> operator + (const vector3<T>& v) const
         {
-            return vector3(x + v.x, y + v.y, z + v.z);
+            return vector3<T>(x + v.x, y + v.y, z + v.z);
         }
 
-        vector3 operator - (const vector3& v) const
+        constexpr vector3 operator - (const vector3<T>& v) const
         {
-            return vector3(x - v.x, y - v.y, z - v.z);
+            return vector3<T>(x - v.x, y - v.y, z - v.z);
         }
 
-        vector3& operator += (const vector3& v)
+        vector3<T>& operator += (const vector3<T>& v)
         {
             x += v.x;
             y += v.y;
@@ -272,7 +264,7 @@ namespace math
             return *this;
         }
 
-        vector3& operator -= (const vector3& v)
+        vector3<T>& operator -= (const vector3<T>& v)
         {
             x -= v.x;
             y -= v.y;
@@ -281,11 +273,11 @@ namespace math
         }
     };
 
-    inline vector3 operator * (real scalar, const vector3& v)
+    template<typename T>
+    constexpr vector3<T> operator * (T scalar, const vector3<T>& v)
     {
         return v*scalar;
     }
-
 } // namespace math
 
 #endif // VECTOR3_H_INCLUDED

@@ -8,17 +8,16 @@
 
 namespace math
 {
-#ifdef MATH_DOUBLE_PRECISION
-    using real = double;
-#else
-    using real = float;
-#endif
-
-    static const real EPS = std::sqrt(std::numeric_limits<real>::epsilon());
-
-    constexpr real sign(real s)
+    template <typename T>
+    constexpr T sign(T s)
     {
         return s < 0 ? -1 : 1;
+    }
+
+    template <typename T>
+    T eps()
+    {
+        return sqrt(std::numeric_limits<T>::epsilon());
     }
 } // namespace math
 

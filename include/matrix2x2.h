@@ -3,6 +3,7 @@
 
 #include "math_predefs.h"
 #include "vector2.h"
+#include <array>
 
 
 namespace math
@@ -11,27 +12,41 @@ namespace math
     ///
     /// Used for 2D linear transformations
     ///
+    template <typename T>
     class matrix2x2
     {
     protected:
-        real val[2][2]; ///< matrix elements
+        std::array<std::array<T, 2>, 2> val; ///< matrix elements
 
     public:
-        static const matrix2x2 IDENTITY; ///< Identity matrix
-
+        static constexpr matrix2x2<T> IDENTITY {1, 0, 0, 1}; ///< Identity matrix
 
         /// \brief Default constructor
         ///
         /// Initializes matrix elements with zero
         ///
-        matrix2x2();
+        constexpr matrix2x2(): matrix2x2(IDENTITY)
+        {
+        }
+
+
+        /// \brief Initializes matrix with a00-a11 elements
+        ///
+        /// \param a00-a11: elements of matrix starting with zero
+        ///
+        constexpr matrix2x2(T a00, T a01, T a10, T a11) : val({a00, a01, a10, a11}) 
+        {
+        }
 
 
         /// \brief Copy constructor
         ///
         /// \param src: source 2x2 matrix
         ///
-        matrix2x2(const matrix2x2& src);
+        constexpr matrix2x2(const matrix2x2<T>& src) : val(src.val)
+        {
+        };
+
 
         /// \brief construct matrix from two column vectors as follows:
         /// [p.x q.x
@@ -40,38 +55,29 @@ namespace math
         /// \param p: 1st vector
         /// \param q: 2nd vector
         ///
-        matrix2x2(const vector2& p, const vector2& q);
-
-        /// \brief Initializes matrix elements with corresponding array elements
-        ///
-        /// \param src: 2x2 array
-        ///
-        matrix2x2(const real src[2][2]);
-
-
-        /// \brief Initializes matrix with a00-a11 elements
-        ///
-        /// \param a00-a11: elements of matrix starting with zero
-        ///
-        matrix2x2(real a00, real a01,
-                  real a10, real a11);
+        constexpr matrix2x2(const vector2<T>& p, const vector2<T>& q) : val({p.x, p.y}, {q.x, q.y})
+        {
+        }
 
 
         /// \brief Constructs matrix transpose
         ///
         /// \return 2x2 matrix
         ///
-        matrix2x2 transpose() const;
+        constexpr matrix2x2<T> transposed() const 
+        {
+            return matrix2x2<T>(val[0][0], val[1][0], val[0][1], val[1][1]);
+        }
 
 
         /// \brief Computes determinant of matrix
         ///
         /// \return determinant
         ///
-        real determinant() const
+        constexpr T determinant() const 
         {
-            return val[0][0]*val[1][1] - val[0][1]*val[1][0];
-        }
+            return val[0][0] * val[1][1] - val[0][1] * val[1][0];
+        }  
 
 
         /// \brief Constructs classical adjoint
@@ -81,10 +87,10 @@ namespace math
         /// Classical adjoint of matrix M is transpose of
         /// the matrix of cofactors of M.
         ///
-        matrix2x2 adjoint() const
+        constexpr matrix2x2<T> adjoint() const
         {
-            return matrix2x2(val[1][1], -val[0][1],
-                            -val[1][0],  val[0][0]);
+            return matrix2x2<T>(val[1][1], -val[0][1],
+                                -val[1][0],  val[0][0]);
         }
 
 
@@ -96,9 +102,9 @@ namespace math
         /// If determinant of M is zero, then M is non-invertible matrix.
         /// In this case exception ET_NON_INVERTIBLE_MATRIX is occurred.
         ///
-        matrix2x2 inverse() const
+        constexpr matrix2x2<T> inverse() const
         {
-            real d = determinant();
+            const T d = determinant();
             return adjoint() / d;
         }
 
@@ -107,15 +113,51 @@ namespace math
         ///
         /// Biased towards OX orthonormalization
         ///
-        void orthonormalize();
+        void orthonormalize()
+        {
+            vector2 ox(val[0][0], val[0][1]);
+            vector2 oy(val[1][0], val[1][1]);
 
-        matrix2x2 operator * (real scalar) const;
+            ox.normalize();
+            oy = oy - ox.dot(oy)*ox;
+            oy.normalize();
 
-        matrix2x2& operator *= (real scalar);
+            val[0][0] = ox.x;
+            val[0][1] = ox.y;
+            val[1][0] = oy.x;
+            val[1][1] = oy.y;
+        }
 
-        matrix2x2 operator / (real scalar) const;
 
-        matrix2x2& operator /= (real scalar);
+        constexpr matrix2x2<T> operator*(T scalar) const 
+        {
+            return matrix2x2(val[0][0] * scalar, val[0][1] * scalar,
+                            val[1][0] * scalar, val[1][1] * scalar);
+        }
+
+        matrix2x2& operator*=(T scalar) 
+        {
+            val[0][0] *= scalar;
+            val[0][1] *= scalar;
+            val[1][0] *= scalar;
+            val[1][1] *= scalar;
+            return *this;
+        }
+
+        constexpr matrix2x2<T> operator/(T scalar) const 
+        {
+            return matrix2x2(val[0][0] / scalar, val[0][1] / scalar,
+                            val[1][0] / scalar, val[1][1] / scalar);
+        }
+
+        matrix2x2<T>& operator/=(T scalar) 
+        {
+            val[0][0] /= scalar;
+            val[0][1] /= scalar;
+            val[1][0] /= scalar;
+            val[1][1] /= scalar;
+            return *this;
+        }
 
 
         /// \brief Multiple by column vector
@@ -123,132 +165,51 @@ namespace math
         /// \param v: 2D column vector
         /// \return 2D column vector
         ///
-        inline vector2 operator * (const vector2& v) const
+        constexpr vector2<T> operator*(const vector2<T>& v) const 
         {
-            return vector2(val[0][0] * v.x + val[1][0] * v.y,
-                           val[0][1] * v.x + val[1][1] * v.y);
+            return vector2<T>(val[0][0] * v.x + val[1][0] * v.y,
+                        val[0][1] * v.x + val[1][1] * v.y);
         }
 
-
-        matrix2x2 operator * (const matrix2x2& b) const;
-
-        matrix2x2& operator *= (const matrix2x2& b)
+        constexpr matrix2x2<T> operator*(const matrix2x2<T>& b) const 
         {
+            return matrix2x2<T>(val[0][0] * b[0][0] + val[1][0] * b[0][1],
+                            val[0][1] * b[0][0] + val[1][1] * b[0][1],
+                            val[0][0] * b[1][0] + val[1][0] * b[1][1],
+                            val[0][1] * b[1][0] + val[1][1] * b[1][1]);
+        }
+
+        constexpr matrix2x2<T>& operator*=(const matrix2x2<T>& b) {
             *this = *this * b;
             return *this;
         }
 
-        matrix2x2& operator = (real src[2][2])
+        matrix2x2<T>& operator = (const matrix2x2<T>& src)
         {
-            memcpy(val, src, sizeof(real)*4);
+            val = src.val;
             return *this;
         }
 
-        matrix2x2& operator = (const matrix2x2& src)
+        constexpr bool operator == (const matrix2x2& op2) const
         {
-            memcpy(val, src.val, sizeof(real)*4);
-            return *this;
+            return val == op2.val;
         }
-
-        bool operator == (const real op2[2][2]) const
-        {
-            return !memcmp(val, op2, sizeof(real)*4);
-        }
-
-        bool operator == (const matrix2x2& op2) const
-        {
-            return !memcmp(val, op2.val, sizeof(real)*4);
-        }
-        real* operator [] (size_t indx)
+        std::array<T, 2>& operator [] (size_t indx)
         {
             return val[indx];
         }
 
-        const real* operator [] (size_t indx) const
+        constexpr std::array<T, 2>& operator [] (size_t indx) const
         {
             return val[indx];
         }
     };
 
-    inline matrix2x2 operator * (real scalar, const matrix2x2& m)
+    template<typename C>
+    constexpr matrix2x2<C> operator * (C scalar, const matrix2x2<C>& m)
     {
-        return m*scalar;
+        return m * scalar;
     }
-
-
-    inline matrix2x2::matrix2x2()
-    {
-        memcpy(val, IDENTITY.val, sizeof(real)*4);
-    }
-
-    inline matrix2x2::matrix2x2(const vector2& p, const vector2& q)
-    {
-        val[0][0] = p.x;
-        val[1][0] = p.y;
-
-        val[0][1] = q.x;
-        val[1][1] = q.y;
-    }
-
-    inline matrix2x2::matrix2x2(const real src[2][2])
-    {
-        memcpy(val, src, sizeof(real)*4);
-    }
-
-    inline matrix2x2::matrix2x2(real a00, real a01,
-                                real a10, real a11)
-    {
-        val[0][0] = a00;
-        val[0][1] = a01;
-        val[1][0] = a10;
-        val[1][1] = a11;
-    }
-
-    inline matrix2x2 matrix2x2::transpose() const
-    {
-        return matrix2x2(val[0][0], val[1][0], val[0][1], val[1][1]);
-    }
-
-    inline matrix2x2 matrix2x2::operator * (real scalar) const
-    {
-        return matrix2x2(val[0][0]*scalar, val[0][1]*scalar,
-                         val[1][0]*scalar, val[1][1]*scalar);
-    }
-
-    inline matrix2x2& matrix2x2::operator *= (real scalar)
-    {
-        val[0][0] *= scalar;
-        val[0][1] *= scalar;
-        val[1][0] *= scalar;
-        val[1][1] *= scalar;
-
-        return *this;
-    }
-
-    inline matrix2x2 matrix2x2::operator / (real scalar) const
-    {
-        return matrix2x2(val[0][0] / scalar, val[0][1] / scalar,
-                         val[1][0] / scalar, val[1][1] / scalar);
-    }
-
-    inline matrix2x2& matrix2x2::operator /= (real scalar)
-    {
-        val[0][0] /= scalar;
-        val[0][1] /= scalar;
-        val[1][0] /= scalar;
-        val[1][1] /= scalar;
-
-        return *this;
-    }
-
-    inline matrix2x2 matrix2x2::operator * (const matrix2x2& b) const
-    {
-        return matrix2x2(val[0][0] * b[0][0] + val[1][0] * b[0][1],
-                         val[0][1] * b[0][0] + val[1][1] * b[0][1],
-                         val[0][0] * b[1][0] + val[1][0] * b[1][1],
-                         val[0][1] * b[1][0] + val[1][1] * b[1][1]);
-    }
-
 } // namespace math
 
 #endif // MATRIX2X2_H_INCLUDED

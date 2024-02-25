@@ -1,13 +1,11 @@
 # Math for computer graphics #
-Version 0.8
-
-**Please note: no unit tests yet!**
+Version 1.0
 
 ### Description ###
 
 * Object-oriented
 * Cartesian, polar, spherical and cylindrical coordinate systems
-* Vectors, matrices, quaternions, Euler angles
+* Vectors, matrices, Euler angles
 
 ### Preparing and compiling ###
 

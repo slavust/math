@@ -3,9 +3,6 @@
 
 #include "angle.h"
 #include "math_predefs.h"
-#include "matrix3x3.h"
-#include "matrix4x4.h"
-#include "quaternion.h"
 
 namespace math
 {
@@ -14,80 +11,56 @@ namespace math
     /// then rotate around derived x axis (pitch)
     /// and then rotate around derived z axis (roll)
     ///
+    template<typename T>
     class euler
     {
     public:
-        real yaw; ///< amount of rotation around y axis (radians)
-        real pitch;///< amount of rotation around x axis (radians)
-        real roll;///< amount of rotation around z axis (radians)
+        T yaw; ///< amount of rotation around y axis (radians)
+        T pitch;///< amount of rotation around x axis (radians)
+        T roll;///< amount of rotation around z axis (radians)
 
         /// \brief Default constructor.
         /// initializes yaw, pitch, roll with zero.
         ///
-        euler() : yaw(0), pitch(0), roll(0)
+        constexpr euler() : yaw(0), pitch(0), roll(0)
         {
         }
 
         /// \brief Initializes yaw, pitch, roll with given values
         ///
-        euler(real yaw, real pitch, real roll) : yaw(yaw), pitch(pitch), roll(roll)
+        constexpr euler(T yaw, T pitch, T roll) : yaw(yaw), pitch(pitch), roll(roll)
         {
         }
 
-        /// \brief Convert to 3x3 rotation matrix
-        ///
-        operator matrix3x3 () const
-        {
-            matrix3x3 ret;
-            toRotationMatrix(ret);
-            return ret;
-        }
-
-        /// \brief Convert to 4x4 rotation matrix
-        ///
-        operator matrix4x4 () const
-        {
-            matrix4x4 ret;
-            toRotationMatrix(ret);
-            return ret;
-        }
-
-        /// \brief Convert to rotation quaternion
-        ///
-        operator quaternion () const
-        {
-            return toQuaternion();
-        }
 
         /// Canonize Euler angles.
         /// Canonical form:
         /// -PI < yaw <= PI,
         /// -PI/2 <= pitch <= PI/2,
-        /// -PI < roll < PI,
-        /// fabs(pitch) == PI/2 --> yaw += -sign(pitch)*roll, roll = 0.
+        /// -PI < roll < PI
         ///
-        void canonize();
+        /// TODO: tests show failure, to fix
+        /*void canonize()
+        {
+            yaw -= floor(yaw / (pi<T>() * 2)) * pi<T>() * 2;
+            if(yaw > pi<T>())
+                yaw -= pi<T>() * 2;
+            else if(yaw < -pi<T>())
+                yaw += pi<T>() * 2;
 
+            pitch -= floor(pitch / (pi<T>() * 2)) * pi<T>() * 2;
+            if (pitch) > pi<T>() / 2)
+            {
+                pitch = pi<T>() - pitch;
+                roll += pi<T>();
+            }
 
-        /// \brief Convert to 3x3 rotation matrix (by link)
-        ///
-        /// \param rot matrix3x3&: output matrix
-        ///
-        void toRotationMatrix(matrix3x3& rot) const;
-
-
-        /// \brief Convert to 4x4 rotation matrix (by link)
-        ///
-        /// \param rot matrix4x4&: output matrix
-        ///
-        void toRotationMatrix(matrix4x4& rot) const;
-
-
-        /// \brief Convert to rotation quaternion
-        ///
-        /// \param rot: output quaternion
-        ///
-        quaternion toQuaternion() const;
+            roll -= floor(roll / (pi<T>() * 2)) * pi<T>() * 2;
+            if(roll > pi<T>())
+                roll -= pi<T>() * 2;
+            else if(yaw < -pi<T>())
+                roll += pi<T>() * 2;
+        }*/
     };
 } // namespace math
 
